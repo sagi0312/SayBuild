@@ -11,6 +11,7 @@ import { findComponent } from "@/lib/utils/findComponent";
 import { updateComponent } from "@/lib/utils/updateComponent";
 import { PropertiesPanel } from "./components/propertiesPanel/PropertiesPanel";
 import { MESSAGE_TYPES } from "../pageRenderer/page";
+import { ComponentsPanel } from "./components/componentsPanel/ComponentsPanel";
 
 export type Message = {
   type: string;
@@ -88,7 +89,13 @@ export default function SayBuilderPage() {
       <BuiderHeader />
 
       <div className="flex-1 flex overflow-hidden">
-        <aside className="w-80 bg-white border-r"></aside>
+        <aside className="w-80 bg-white border-r">
+          <ComponentsPanel
+            onVoiceCommand={() => {
+              console.log("Voice command triggered");
+            }}
+          />
+        </aside>
 
         <main className="flex flex-1 border-t border-gray-300">
           <section className="flex-1 p-6 bg-gray-100 border-r border-gray-300 relative">
