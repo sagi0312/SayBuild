@@ -8,7 +8,7 @@ export default function Home() {
           <div className="flex justify-between items-center h-16">
             <h1 className="text-xl text-blue-500 font-bold">SayBuild</h1>
             <Link
-              href="/builder"
+              href="/sayBuilder"
               className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
             >
               Try Builder
@@ -32,14 +32,11 @@ export default function Home() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/builder"
+              href="/sayBuilder"
               className="px-8 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-lg font-medium"
             >
               Start Building Free
             </Link>
-            <button className="px-8 py-3 border-2 border-gray-300 rounded-lg hover:border-gray-400 transition text-lg font-medium">
-              Watch Demo
-            </button>
           </div>
 
           <p className="mt-8 text-sm text-gray-500">
@@ -50,7 +47,7 @@ export default function Home() {
 
       {/* Simple Footer */}
       <footer className="border-t py-6 text-center text-sm text-gray-600">
-        © 2024 SayBuild. Built with voice and AI.
+        © 2025 SayBuild. Built with voice and AI.
       </footer>
     </div>
   );
