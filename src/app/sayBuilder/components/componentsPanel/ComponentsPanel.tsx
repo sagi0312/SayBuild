@@ -1,17 +1,18 @@
 "use client";
 import { COMPONENT_LIBRARY } from "@/app/pageRenderer/library/componentLibrary";
+import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
 import { useState } from "react";
 
-interface ComponentsPanelProps {
-  onVoiceCommand?: () => void;
-}
-
-export function ComponentsPanel({ onVoiceCommand }: ComponentsPanelProps) {
-  const [isListening, setIsListening] = useState(false);
+export function ComponentsPanel() {
+  const { isListening, startListening, stopListening, transcript } =
+    useSpeechRecognition();
 
   const handleVoiceClick = () => {
-    setIsListening(!isListening);
-    onVoiceCommand?.();
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
   };
 
   return (
@@ -33,7 +34,6 @@ export function ComponentsPanel({ onVoiceCommand }: ComponentsPanelProps) {
           }`}
         >
           <div className="flex items-center justify-center gap-2">
-            <span className="text-xl">🎤</span>
             <span className="font-medium">
               {isListening ? "Listening..." : "Voice Command"}
             </span>
@@ -53,8 +53,20 @@ export function ComponentsPanel({ onVoiceCommand }: ComponentsPanelProps) {
             onClick={() => console.log(`${type} clicked`)}
           >
             <h3 className="font-semibold text-gray-800">{type}</h3>
+            <p className="text-sm text-gray-600">
+              {library.hasChildren
+                ? "Can contain other components"
+                : "Standalone component"}
+            </p>
           </div>
         ))}
+      </div>
+      {/* Transcript Display */}
+      <div className="p-4 border-t border-gray-200 bg-gray-50">
+        <h3 className="text-sm font-medium text-gray-700 mb-1">Transcript:</h3>
+        <div className="text-sm text-gray-600 min-h-[40px]">
+          {transcript || <span className="opacity-50">No transcript yet</span>}
+        </div>
       </div>
     </div>
   );

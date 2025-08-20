@@ -53,20 +53,23 @@ export default function SayBuilderPage() {
   };
 
   useEffect(() => {
-    setComponentTree(SAMPLE_DATA);
-  }, []);
-
-  useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
       if (e.origin !== "http://localhost:3000") return;
 
-      if (e.data.type === MESSAGE_TYPES.HOST_READY) {
-        sendMessageToHost({
-          type: MESSAGE_TYPES.UPDATE_COMPONENTS,
-          components: componentTree,
-        });
-      } else if (e.data.type === MESSAGE_TYPES.COMPONENT_POSITIONS) {
-        setComponentPositions(e.data.positions);
+      switch (e.data.type) {
+        case MESSAGE_TYPES.HOST_READY: {
+          sendMessageToHost({
+            type: MESSAGE_TYPES.UPDATE_COMPONENTS,
+            components: componentTree,
+          });
+          break;
+        }
+        case MESSAGE_TYPES.COMPONENT_POSITIONS: {
+          setComponentPositions(e.data.positions);
+          break;
+        }
+        default:
+          break;
       }
     };
 
@@ -90,11 +93,7 @@ export default function SayBuilderPage() {
 
       <div className="flex-1 flex overflow-hidden">
         <aside className="w-80 bg-white border-r">
-          <ComponentsPanel
-            onVoiceCommand={() => {
-              console.log("Voice command triggered");
-            }}
-          />
+          <ComponentsPanel />
         </aside>
 
         <main className="flex flex-1 border-t border-gray-300">
