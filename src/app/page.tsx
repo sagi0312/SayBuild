@@ -19,7 +19,7 @@ export default function Home() {
             href="/sayBuilder"
             className="mt-4 inline-block bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition"
           >
-            Start Building Free
+            Start Building
           </Link>
         </div>
       </div>
