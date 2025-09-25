@@ -5,25 +5,26 @@ export const SAMPLE_DATA: Component = {
   key: uuid(),
   type: COMPONENT_TYPE.Box,
   props: {
-    backgroundColor: "#f9c4e4",
+    backgroundColor: "#c4f9edff",
     children: [
       {
         key: uuid(),
         type: COMPONENT_TYPE.Text,
         props: {
-          color: "#ea39a6",
+          color: "#3980eaff",
           fontSize: 48,
           fontWeight: 900,
-          text: "WHERE BRAND MEETS THE BROWSER",
+          text: "Speak commands, and watch it appear live",
         },
       },
       {
         key: uuid(),
         type: COMPONENT_TYPE.Text,
         props: {
+          color: "black",
           fontSize: 20,
           fontWeight: 500,
-          text: "Makeswift gives marketers visual freedom and developers full control so teams can design, ship, and scale modern frontends without headaches.",
+          text: "Voice input with the Web Speech API (toggle mic on/off).",
         },
       },
       {
@@ -32,7 +33,7 @@ export const SAMPLE_DATA: Component = {
         props: {
           padding: 16,
           width: 200,
-          backgroundColor: "#ea39a6",
+          backgroundColor: "#4e39eaff",
           children: [
             {
               key: uuid(),
