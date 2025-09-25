@@ -13,6 +13,9 @@ export const BuiderHeader = () => {
           <a href="/" className="mr-5 hover:text-white">
             Home
           </a>
+          <a href="/" className="mr-5 hover:text-white">
+            Preview
+          </a>
         </nav>
       </div>
     </header>
