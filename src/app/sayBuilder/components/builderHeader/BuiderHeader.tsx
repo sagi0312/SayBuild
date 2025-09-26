@@ -1,4 +1,19 @@
-export const BuiderHeader = () => {
+"use client";
+import { Component } from "@/lib/types";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+interface BuiderHeaderProps {
+  debouncedComponentTree?: Component;
+}
+export const BuiderHeader = ({ debouncedComponentTree }: BuiderHeaderProps) => {
+  const pathname = usePathname();
+  const openPreviewInNewTab = () => {
+    const encodedData = encodeURIComponent(
+      JSON.stringify(debouncedComponentTree)
+    );
+    window.open(`/preview?componentTree=${encodedData}`, "_blank");
+  };
   return (
     <header className="bg-gray-800">
       <div className="container mx-auto flex flex-wrap pt-4 pl-5 pb-4 pl-5 flex-col md:flex-row items-center">
@@ -10,12 +25,17 @@ export const BuiderHeader = () => {
           }
         </div>
         <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-700	flex flex-wrap items-center text-base justify-center">
-          <a href="/" className="mr-5 hover:text-white">
+          <Link href="/" className="mr-5 hover:text-white">
             Home
-          </a>
-          <a href="/" className="mr-5 hover:text-white">
-            Preview
-          </a>
+          </Link>
+          {pathname === "/sayBuilder" && (
+            <button
+              onClick={openPreviewInNewTab}
+              className="mr-5 hover:text-white cursor-pointer"
+            >
+              Preview
+            </button>
+          )}
         </nav>
       </div>
     </header>

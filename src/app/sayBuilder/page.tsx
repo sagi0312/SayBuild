@@ -1,17 +1,17 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { SAMPLE_DATA } from "../pageRenderer/library/sample-data";
 import { BuiderHeader } from "./components/builderHeader/BuiderHeader";
 import {
   ComponentOverlay,
   ComponentPositions,
 } from "./components/componentOverlay/ComponentOverlay";
-import { Component, ComponentProps } from "@/lib/types";
+import { Component, ComponentProps, MESSAGE_TYPES } from "@/lib/types";
 import { findComponent } from "@/lib/utils/findComponent";
 import { updateComponent } from "@/lib/utils/updateComponent";
 import { PropertiesPanel } from "./components/propertiesPanel/PropertiesPanel";
-import { MESSAGE_TYPES } from "../pageRenderer/page";
 import { ComponentsPanel } from "./components/componentsPanel/ComponentsPanel";
+import { useDebouncer } from "@/hooks/useDebouncer";
 
 export type Message = {
   type: string;
@@ -26,17 +26,19 @@ export default function SayBuilderPage() {
   const [selectedComponentKey, setSelectedComponentKey] = useState<string>(
     componentTree.key
   );
+
   const selectedComponent = findComponent(componentTree, selectedComponentKey);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const debouncedComponentTree = useDebouncer(componentTree, 300);
 
-  const sendMessageToHost = (message: Message) => {
+  const sendMessageToHost = useCallback((message: Message) => {
     if (iframeRef.current?.contentWindow) {
       iframeRef.current.contentWindow.postMessage(
         message,
         "http://localhost:3000"
       );
     }
-  };
+  }, []);
 
   const handleOnChange = (
     value: string | number,
@@ -60,7 +62,7 @@ export default function SayBuilderPage() {
         case MESSAGE_TYPES.HOST_READY: {
           sendMessageToHost({
             type: MESSAGE_TYPES.UPDATE_COMPONENTS,
-            components: componentTree,
+            components: debouncedComponentTree,
           });
           break;
         }
@@ -78,19 +80,18 @@ export default function SayBuilderPage() {
     return () => {
       window.removeEventListener("message", handleMessage);
     };
-  }, [componentTree, sendMessageToHost]);
+  }, [debouncedComponentTree]);
 
   useEffect(() => {
     sendMessageToHost({
       type: MESSAGE_TYPES.UPDATE_COMPONENTS,
-      components: componentTree,
+      components: debouncedComponentTree,
     });
-  }, [componentTree, sendMessageToHost]);
+  }, [debouncedComponentTree, sendMessageToHost]);
 
   return (
     <div className="h-screen flex flex-col">
-      <BuiderHeader />
-
+      <BuiderHeader debouncedComponentTree={debouncedComponentTree} />
       <div className="flex-1 flex overflow-hidden">
         <aside className="w-80 bg-white border-r">
           <ComponentsPanel />

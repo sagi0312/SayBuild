@@ -1,12 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { renderComponent } from "./library/renderComponent";
-
-export const MESSAGE_TYPES = {
-  HOST_READY: "HOST_READY",
-  UPDATE_COMPONENTS: "UPDATE_COMPONENTS",
-  COMPONENT_POSITIONS: "COMPONENT_POSITIONS",
-};
+import { MESSAGE_TYPES } from "@/lib/types";
 
 export default function PageRenderer() {
   const [components, setComponents] = useState();
@@ -70,6 +65,6 @@ export default function PageRenderer() {
     // Small delay to ensure the DOM is ready
     setTimeout(measureComponentPositions, 0);
   }, [components]);
-  console.log("here");
+
   return <div className="p-8">{components && renderComponent(components)}</div>;
 }

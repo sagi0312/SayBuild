@@ -57,3 +57,9 @@ export type ComponentProps =
   | TextComponentProps
   | BoxComponentProps
   | ButtonComponentProps;
+
+export const MESSAGE_TYPES = {
+  HOST_READY: "HOST_READY",
+  UPDATE_COMPONENTS: "UPDATE_COMPONENTS",
+  COMPONENT_POSITIONS: "COMPONENT_POSITIONS",
+};

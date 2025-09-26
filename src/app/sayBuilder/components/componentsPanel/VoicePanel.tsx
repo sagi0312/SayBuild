@@ -2,6 +2,9 @@
 import { useState, useRef } from "react";
 import { FaMicrophone } from "react-icons/fa";
 import clsx from "clsx";
+interface WindowWithSpeechRecognition extends Window {
+  webkitSpeechRecognition: new () => SpeechRecognitionInstance;
+}
 
 interface SpeechRecognitionEvent {
   results: SpeechRecognitionResultList;
@@ -12,10 +15,20 @@ interface VoicePanelProps {
   onTranscriptChange?: (transcript: string) => void;
 }
 
+interface SpeechRecognitionInstance {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start(): void;
+  stop(): void;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onend: (() => void) | null;
+}
+
 export const VoicePanel = ({ onTranscriptChange }: VoicePanelProps) => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState("");
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const finalRef = useRef<string>("");
 
   const toggle = () => {
@@ -31,7 +44,9 @@ export const VoicePanel = ({ onTranscriptChange }: VoicePanelProps) => {
       return;
     }
 
-    const rec = new window.webkitSpeechRecognition();
+    const rec = new (
+      window as WindowWithSpeechRecognition
+    ).webkitSpeechRecognition();
     rec.continuous = true;
     rec.interimResults = true;
     rec.lang = "en-US";
@@ -62,10 +77,6 @@ export const VoicePanel = ({ onTranscriptChange }: VoicePanelProps) => {
     setTranscript("");
   };
 
-  const handleClick = () => {
-    onTranscriptChange?.("");
-  };
-
   return (
     <>
       <div
@@ -73,7 +84,7 @@ export const VoicePanel = ({ onTranscriptChange }: VoicePanelProps) => {
           "border border-gray-300 p-4 m-4 cursor-pointer rounded-full",
           isListening ? "bg-gray-500" : "bg-gray-100 hover:bg-gray-200"
         )}
-        onClick={handleClick}
+        onClick={toggle}
       >
         <div className="flex justify-center items-center">
           <FaMicrophone
