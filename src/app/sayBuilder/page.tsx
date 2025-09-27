@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SAMPLE_DATA } from "../pageRenderer/library/sample-data";
 import { BuiderHeader } from "./components/builderHeader/BuiderHeader";
 import {
@@ -31,14 +31,14 @@ export default function SayBuilderPage() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const debouncedComponentTree = useDebouncer(componentTree, 300);
 
-  const sendMessageToHost = useCallback((message: Message) => {
+  const sendMessageToHost = (message: Message) => {
     if (iframeRef.current?.contentWindow) {
       iframeRef.current.contentWindow.postMessage(
         message,
         "http://localhost:3000"
       );
     }
-  }, []);
+  };
 
   const handleOnChange = (
     value: string | number,
