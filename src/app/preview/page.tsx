@@ -28,14 +28,14 @@ function PreviewContent() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="p-8">{renderComponent(components)}</div>
+      <div>{renderComponent(components)}</div>
     </div>
   );
 }
 
 export default function PreviewPage() {
   return (
-    <Suspense fallback={<div className="p-8">Loading preview...</div>}>
+    <Suspense fallback={<div>Loading preview...</div>}>
       <PreviewContent />
     </Suspense>
   );
