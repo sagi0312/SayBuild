@@ -66,5 +66,5 @@ export default function PageRenderer() {
     setTimeout(measureComponentPositions, 0);
   }, [components]);
 
-  return <div className="p-8">{components && renderComponent(components)}</div>;
+  return <div>{components && renderComponent(components)}</div>;
 }
