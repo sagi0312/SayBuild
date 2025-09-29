@@ -78,36 +78,44 @@ export const VoicePanel = ({ onTranscriptChange }: VoicePanelProps) => {
   };
 
   return (
-    <>
+    <div className="space-y-4">
+      {/* Microphone Button */}
       <div
         className={clsx(
-          "border border-gray-300 p-4 m-4 cursor-pointer rounded-full",
-          isListening ? "bg-gray-500" : "bg-gray-100 hover:bg-gray-200"
+          "border p-4 cursor-pointer rounded-full transition-colors flex flex-row items-center justify-center gap-4",
+          isListening
+            ? "bg-red-500 border-red-500"
+            : "bg-green-200 border-gray-300 hover:bg-gray-50"
         )}
         onClick={toggle}
       >
-        <div className="flex justify-center items-center">
-          <FaMicrophone
+        <FaMicrophone
+          className={clsx(isListening ? "text-white" : "text-gray-900")}
+          size="2.5rem"
+        />
+        <div>
+          <h2
             className={clsx(
-              "mr-2",
+              "text-xl font-medium",
               isListening ? "text-white" : "text-gray-800"
             )}
-            size={"3rem"}
-          />
-          <h2 className="text-black text-2xl">
-            {isListening ? "Listening..." : "Click me"}
+          >
+            {isListening ? "Listening..." : "Start Voice Command"}
           </h2>
         </div>
       </div>
-      <div
-        className={clsx(
-          "m-4 text-black p-4 flex items-center bg-gray-200",
 
-          isListening && "animate-marquee whitespace-nowrap"
-        )}
-      >
-        {transcript || "Transcript will appear here..."}
+      {/* Transcript Display */}
+      <div className="m-4 bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <p className="text-sm text-gray-600 mb-2">Transcript:</p>
+        <div className="text-gray-800">
+          {transcript || (
+            <span className="text-gray-400 italic">
+              Your voice command will appear here...
+            </span>
+          )}
+        </div>
       </div>
-    </>
+    </div>
   );
 };

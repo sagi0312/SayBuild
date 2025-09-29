@@ -7,24 +7,62 @@ export function ComponentsPanel() {
   };
 
   return (
-    <>
+    <div className="p-6 space-y-6">
       <VoicePanel onTranscriptChange={handleTranscriptChange} />
-      <div className="m-8 text-black font-bold text-lg underline">
-        AVAILABLE COMPONENTS:
+
+      <div>
+        <h2 className="text-lg text-gray-800 mb-4 flex items-center font-semibold justify-center">
+          Available Components
+        </h2>
+
+        <div>
+          {/* Button Component */}
+          <div className="bg-white p-4 shadow-sm hover:shadow-md transition-shadow">
+            <div className="flex items-start gap-3">
+              <div className="bg-blue-100 text-blue-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">
+                1
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-800 mb-1">Button</h3>
+                <p className="text-gray-600 text-sm">
+                  With customizable text and background color.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Text Component */}
+          <div className="bg-white p-4 shadow-sm hover:shadow-md transition-shadow">
+            <div className="flex items-start gap-3">
+              <div className="bg-green-100 text-green-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">
+                2
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-800 mb-1">Text</h3>
+                <p className="text-gray-600 text-sm">
+                  With customizable content, font size, font weight, and color.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Box Component */}
+          <div className="bg-white p-4 shadow-sm hover:shadow-md transition-shadow">
+            <div className="flex items-start gap-3">
+              <div className="bg-purple-100 text-purple-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">
+                3
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-800 mb-1">Box</h3>
+                <p className="text-gray-600 text-sm">
+                  With customizable background color, padding, width, and
+                  support for child components.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="m-8 text-black">
-        <span className="m-2 font-bold">1. Button:</span>A clickable button
-        component with customizable text and background color.
-      </div>
-      <div className="m-8 text-black">
-        <span className="m-2 font-bold"> 2. Text:</span> A text display
-        component with customizable content, font size, font weight, and color.
-      </div>
-      <div className="m-8 text-black">
-        <span className="m-2 font-bold">3. Box:</span> A box input component
-        with customizable background color, padding, width, and add children
-        components to it.
-      </div>
-    </>
+    </div>
   );
 }
