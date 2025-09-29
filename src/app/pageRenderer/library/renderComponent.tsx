@@ -15,6 +15,7 @@ export function renderComponent(component: Component): ReactNode {
       <ComponentClass
         key={component.key}
         componentKey={component.key}
+        alias={component.alias}
         {...props}
       >
         {children?.map(renderComponent)}
@@ -26,6 +27,7 @@ export function renderComponent(component: Component): ReactNode {
     <ComponentClass
       key={component.key}
       componentKey={component.key}
+      alias={component.alias}
       {...component.props}
     />
   );

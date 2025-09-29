@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 export type BoxProps = {
   componentKey: string;
+  alias?: string;
   backgroundColor?: string;
   padding?: number;
   width?: number;
@@ -10,6 +11,7 @@ export type BoxProps = {
 
 export function Box({
   backgroundColor,
+  alias,
   padding,
   width,
   children,
@@ -18,8 +20,9 @@ export function Box({
   return (
     <div
       data-component-key={componentKey}
+      data-component-alias={alias}
       className={`
-        flex flex-col p-8 gap-4 
+        flex flex-col gap-4 
       `}
       style={{ backgroundColor, padding, width }}
     >

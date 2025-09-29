@@ -24,6 +24,7 @@ export enum ButtonComponentProps {
 
 export type Box = {
   key: string;
+  alias?: string;
   type: typeof COMPONENT_TYPE.Box;
   props: {
     padding?: number;
@@ -35,6 +36,7 @@ export type Box = {
 
 export type Text = {
   key: string;
+  alias?: string;
   type: typeof COMPONENT_TYPE.Text;
   props: {
     color?: string;
@@ -46,6 +48,7 @@ export type Text = {
 
 export type Button = {
   key: string;
+  alias?: string;
   type: typeof COMPONENT_TYPE.Button;
   props: {
     backgroundColor?: string;

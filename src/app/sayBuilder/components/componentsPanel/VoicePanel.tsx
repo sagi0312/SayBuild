@@ -101,7 +101,7 @@ export const VoicePanel = ({ onTranscriptChange }: VoicePanelProps) => {
       </div>
       <div
         className={clsx(
-          "m-4 text-black p-4",
+          "m-4 text-black p-4 flex items-center bg-gray-200",
 
           isListening && "animate-marquee whitespace-nowrap"
         )}

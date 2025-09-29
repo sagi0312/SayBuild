@@ -1,4 +1,5 @@
 export type TextProps = {
+  alias?: string;
   componentKey: string;
   text?: string;
   fontSize?: number;
@@ -7,6 +8,7 @@ export type TextProps = {
 };
 
 export function Text({
+  alias,
   text,
   fontSize,
   fontWeight,
@@ -16,6 +18,7 @@ export function Text({
   return (
     <div
       data-component-key={componentKey}
+      data-component-alias={alias}
       className={`
         font-sans leading-none
       `}

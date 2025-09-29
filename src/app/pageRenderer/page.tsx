@@ -11,9 +11,11 @@ export default function PageRenderer() {
     const positions = Array.from(elements).map((element) => {
       const rect = element.getBoundingClientRect();
       const componentKey = element.getAttribute("data-component-key");
+      const alias = element.getAttribute("data-component-alias");
 
       return {
         key: componentKey,
+        alias: alias,
         top: rect.top,
         left: rect.left,
         width: rect.width,
@@ -64,6 +66,18 @@ export default function PageRenderer() {
   useEffect(() => {
     // Small delay to ensure the DOM is ready
     setTimeout(measureComponentPositions, 0);
+  }, [components]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      measureComponentPositions();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, [components]);
 
   return <div>{components && renderComponent(components)}</div>;

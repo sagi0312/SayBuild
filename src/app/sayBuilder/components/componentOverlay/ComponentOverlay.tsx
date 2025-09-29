@@ -1,8 +1,10 @@
 "use client";
 import { useState } from "react";
+import clsx from "clsx";
 
 export type ComponentPositions = {
   key: string;
+  alias: string;
   top: number;
   left: number;
   width: number;
@@ -34,30 +36,37 @@ export const ComponentOverlay = ({
 
   return (
     <div className="absolute inset-0 pointer-events-none">
-      {componentPositions.map((pos) => (
-        <div
-          key={pos.key}
-          className={`absolute pointer-events-auto cursor-pointer border-2 ${
-            selectedComponentKey === pos.key
-              ? "border-green-500"
-              : "border-transparent hover:border-red-500"
-          }`}
-          style={{
-            left: pos.x + iframeRect.left,
-            top: pos.y + iframeRect.top + 1,
-            width: pos.width + 1,
-            height: pos.height + 1,
-            zIndex: 1000,
-          }}
-          onClick={(e) => {
-            e.stopPropagation();
-            setSelectedComponentKey(pos.key);
-            if (onComponentClick) {
-              onComponentClick(pos.key);
-            }
-          }}
-        />
-      ))}
+      {componentPositions.map((pos) => {
+        return (
+          <div
+            key={pos.key}
+            className={clsx(
+              "group absolute pointer-events-auto cursor-pointer border-2",
+              selectedComponentKey === pos.key
+                ? "border-green-500"
+                : "border-transparent hover:border-red-500"
+            )}
+            style={{
+              left: pos.x + iframeRect.left,
+              top: pos.y + iframeRect.top + 1,
+              width: pos.width + 1,
+              height: pos.height + 1,
+              zIndex: 1000,
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedComponentKey(pos.key);
+              if (onComponentClick) {
+                onComponentClick(pos.key);
+              }
+            }}
+          >
+            <div className={"bg-white text-sm text-black inline-flex"}>
+              {pos.alias}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
