@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FaMicrophone } from "react-icons/fa";
 import clsx from "clsx";
 interface WindowWithSpeechRecognition extends Window {
@@ -13,6 +13,7 @@ interface SpeechRecognitionEvent {
 
 interface VoicePanelProps {
   onTranscriptChange?: (transcript: string) => void;
+  onShowAliases?: (show: boolean) => void;
 }
 
 interface SpeechRecognitionInstance {
@@ -25,11 +26,21 @@ interface SpeechRecognitionInstance {
   onend: (() => void) | null;
 }
 
-export const VoicePanel = ({ onTranscriptChange }: VoicePanelProps) => {
+export const VoicePanel = ({
+  onTranscriptChange,
+  onShowAliases,
+}: VoicePanelProps) => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState("");
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const finalRef = useRef<string>("");
+  const prevTranscriptRef = useRef("");
+
+  useEffect(() => {
+    if (!isListening && finalRef.current.trim()) {
+      onTranscriptChange?.(finalRef.current);
+    }
+  }, [isListening, onTranscriptChange]);
 
   const toggle = () => {
     if (!("webkitSpeechRecognition" in window)) {
@@ -61,9 +72,33 @@ export const VoicePanel = ({ onTranscriptChange }: VoicePanelProps) => {
         else interim += r[0].transcript;
       }
 
-      if (newFinals) finalRef.current += newFinals;
-      setTranscript(finalRef.current + interim);
-      onTranscriptChange?.(finalRef.current + interim);
+      if (newFinals) {
+        finalRef.current += newFinals;
+      }
+
+      const fullTranscript = finalRef.current + interim;
+      setTranscript(fullTranscript);
+
+      const prepositions = [
+        "below",
+        "above",
+        "under",
+        "inside",
+        "next to",
+        "beside",
+      ];
+      const current = fullTranscript.toLowerCase();
+      const prev = prevTranscriptRef.current.toLowerCase();
+
+      const hasNewPreposition = prepositions.some(
+        (prep) => current.includes(prep) && !prev.includes(prep)
+      );
+
+      if (hasNewPreposition) {
+        onShowAliases?.(true);
+      }
+
+      prevTranscriptRef.current = fullTranscript;
     };
 
     rec.onend = () => {
@@ -74,6 +109,7 @@ export const VoicePanel = ({ onTranscriptChange }: VoicePanelProps) => {
     rec.start();
     setIsListening(true);
     finalRef.current = "";
+    prevTranscriptRef.current = "";
     setTranscript("");
   };
 
@@ -106,8 +142,21 @@ export const VoicePanel = ({ onTranscriptChange }: VoicePanelProps) => {
       </div>
 
       {/* Transcript Display */}
-      <div className="m-4 bg-gray-50 border border-gray-200 rounded-lg p-4">
-        <p className="text-sm text-gray-600 mb-2">Transcript:</p>
+      <div className="mt-4 bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-sm text-gray-600">Transcript:</p>
+          <button
+            className="text-xs bg-gray-500 text-white px-3 py-1 rounded-lg hover:bg-gray-600 transition-colors"
+            onClick={() => {
+              setTranscript("");
+              finalRef.current = "";
+              prevTranscriptRef.current = "";
+              onTranscriptChange?.("");
+            }}
+          >
+            Clear
+          </button>
+        </div>
         <div className="text-gray-800">
           {transcript || (
             <span className="text-gray-400 italic">

@@ -19,12 +19,14 @@ interface ComponentOverlayProps {
   componentPositions: ComponentPositions[];
   iframeRef: React.RefObject<HTMLIFrameElement | null>;
   onComponentClick?: (key: string) => void;
+  showAliases?: boolean;
 }
 
 export const ComponentOverlay = ({
   componentPositions,
   iframeRef,
   onComponentClick,
+  showAliases = false,
 }: ComponentOverlayProps) => {
   const [selectedComponentKey, setSelectedComponentKey] = useState<string>("");
   const iframeRect = iframeRef?.current?.getBoundingClientRect() || {
@@ -61,9 +63,11 @@ export const ComponentOverlay = ({
               }
             }}
           >
-            <div className={"bg-white text-sm text-black inline-flex"}>
-              {pos.alias}
-            </div>
+            {showAliases && (
+              <div className={"bg-black text-md text-white inline-flex"}>
+                {pos.alias}
+              </div>
+            )}
           </div>
         );
       })}

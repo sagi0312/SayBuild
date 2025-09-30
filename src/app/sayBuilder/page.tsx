@@ -12,6 +12,7 @@ import { updateComponent } from "@/lib/utils/updateComponent";
 import { PropertiesPanel } from "./components/propertiesPanel/PropertiesPanel";
 import { ComponentsPanel } from "./components/componentsPanel/ComponentsPanel";
 import { useDebouncer } from "@/hooks/useDebouncer";
+import { callLLMToParseTranscript } from "@/lib/utils/callLLMToParseTranscript";
 
 export type Message = {
   type: string;
@@ -53,7 +54,24 @@ export default function SayBuilderPage() {
     );
     setComponentTree(updatedTree);
   };
+  const [showAliases, setShowAliases] = useState(false);
+  const aliasTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  const handleShowAliases = (show: boolean) => {
+    setShowAliases(show);
+    if (show) {
+      if (aliasTimeoutRef.current) {
+        clearTimeout(aliasTimeoutRef.current);
+      }
+      aliasTimeoutRef.current = setTimeout(() => {
+        setShowAliases(false);
+      }, 2000);
+    }
+  };
+
+  const handleTranscriptChange = (transcript: string) => {
+    callLLMToParseTranscript(transcript);
+  };
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
       if (e.origin !== "http://localhost:3000") return;
@@ -94,7 +112,10 @@ export default function SayBuilderPage() {
       <BuiderHeader debouncedComponentTree={debouncedComponentTree} />
       <div className="flex-1 flex overflow-hidden">
         <aside className="w-80 bg-white border-r">
-          <ComponentsPanel />
+          <ComponentsPanel
+            onTranscriptChange={handleTranscriptChange}
+            onShowAliases={handleShowAliases}
+          />
         </aside>
 
         <main className="flex flex-1 border-t border-gray-300">
@@ -112,6 +133,7 @@ export default function SayBuilderPage() {
             onComponentClick={(key: string) => {
               setSelectedComponentKey(key);
             }}
+            showAliases={showAliases}
           />
         </main>
 
