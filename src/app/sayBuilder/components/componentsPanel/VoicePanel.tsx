@@ -136,7 +136,7 @@ export const VoicePanel = ({
               isListening ? "text-white" : "text-gray-800"
             )}
           >
-            {isListening ? "Listening..." : "Start Voice Command"}
+            {isListening ? "Send Now" : "Start Voice Command"}
           </h2>
         </div>
       </div>

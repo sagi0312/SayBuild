@@ -69,8 +69,8 @@ export default function SayBuilderPage() {
     }
   };
 
-  const handleTranscriptChange = (transcript: string) => {
-    callLLMToParseTranscript(transcript);
+  const handleTranscriptChange = async (transcript: string) => {
+    const commands = await callLLMToParseTranscript(transcript);
   };
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {

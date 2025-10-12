@@ -1,11 +1,6 @@
 import { Component, COMPONENT_TYPE } from "@/lib/types";
 import { v4 as uuid } from "uuid";
 
-const createKey = () => {
-  const key = uuid();
-  return { key, alias: key.substring(0, 4) };
-};
-
 export const SAMPLE_DATA: Component = (() => {
   const key = uuid();
   return {
