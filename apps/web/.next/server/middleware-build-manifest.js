@@ -16,8 +16,8 @@ globalThis.__BUILD_MANIFEST = {
     "static/chunks/19746_next_dist_client_30ba71ef._.js",
     "static/chunks/19746_next_dist_b00a1060._.js",
     "static/chunks/61dca_@swc_helpers_cjs_28edb73c._.js",
-    "static/chunks/_e69f0d32._.js",
-    "static/chunks/_3ed7b2a0._.js"
+    "static/chunks/apps_web_e69f0d32._.js",
+    "static/chunks/apps_web_3ed7b2a0._.js"
   ],
   "ampFirstPages": []
 };
