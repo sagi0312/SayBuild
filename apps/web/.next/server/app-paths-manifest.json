@@ -1,0 +1,6 @@
+{
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/page": "app/page.js",
+  "/pageRenderer/page": "app/pageRenderer/page.js",
+  "/sayBuilder/page": "app/sayBuilder/page.js"
+}

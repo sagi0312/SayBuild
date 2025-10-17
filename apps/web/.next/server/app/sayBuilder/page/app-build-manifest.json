@@ -1,0 +1,25 @@
+{
+  "pages": {
+    "/sayBuilder/page": [
+      "static/chunks/19746_next_dist_aff148c7._.js",
+      "static/chunks/src_app_favicon_ico_mjs_36c63a13._.js",
+      "static/chunks/[root-of-the-server]__8ebb6d4b._.css",
+      "static/chunks/src_app_layout_tsx_08578f17._.js",
+      "static/chunks/19746_next_dist_client_components_builtin_global-error_ea3a2678.js",
+      "static/chunks/src_b9a2ce83._.js",
+      "static/chunks/b2692_react-icons_fa_index_mjs_290cc807._.js",
+      "static/chunks/b2692_react-icons_lib_d4addfaa._.js",
+      "static/chunks/node_modules__pnpm_b8dc2af7._.js",
+      "static/chunks/src_app_sayBuilder_page_tsx_ea3a2678._.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_d9dee7ac._.js",
+      "static/chunks/19746_next_dist_compiled_react-dom_728543a3._.js",
+      "static/chunks/19746_next_dist_compiled_next-devtools_index_7f450989.js",
+      "static/chunks/19746_next_dist_compiled_677dae29._.js",
+      "static/chunks/19746_next_dist_client_30ba71ef._.js",
+      "static/chunks/19746_next_dist_b00a1060._.js",
+      "static/chunks/61dca_@swc_helpers_cjs_28edb73c._.js",
+      "static/chunks/_e69f0d32._.js",
+      "static/chunks/_3ed7b2a0._.js"
+    ]
+  }
+}
