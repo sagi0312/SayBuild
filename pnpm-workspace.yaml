@@ -1,9 +1,3 @@
 packages:
-  - apps/*
-  - component-tree-services/*
-
-ignoredBuiltDependencies:
-  - '@tailwindcss/oxide'
-  - esbuild
-  - sharp
-  - unrs-resolver
+  - 'apps/*'
+  - 'component-tree-services'
