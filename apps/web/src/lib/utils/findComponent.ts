@@ -1,4 +1,4 @@
-import { Component, COMPONENT_TYPE } from "../types";
+import { COMPONENT_TYPE, Component } from "@saybuild/shared";
 
 export const findComponent = (
   current: Component,

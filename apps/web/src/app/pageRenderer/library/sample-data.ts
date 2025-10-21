@@ -1,4 +1,4 @@
-import { Component, COMPONENT_TYPE } from "@/lib/types";
+import { Component, COMPONENT_TYPE } from "@saybuild/shared";
 import { v4 as uuid } from "uuid";
 
 export const SAMPLE_DATA: Component = (() => {

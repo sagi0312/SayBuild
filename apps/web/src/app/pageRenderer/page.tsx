@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { renderComponent } from "./library/renderComponent";
-import { MESSAGE_TYPES } from "@/lib/types";
+import { MESSAGE_TYPES } from "@saybuild/shared";
 
 export default function PageRenderer() {
   const [components, setComponents] = useState();

@@ -1,4 +1,4 @@
-import { COMPONENT_TYPE } from "@/lib/types";
+import { COMPONENT_TYPE } from "@saybuild/shared";
 import { Box, BoxProps } from "../components/Box";
 import { Text } from "../components/Text";
 import { Button, ButtonProps } from "../components/Button";

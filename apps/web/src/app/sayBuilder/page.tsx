@@ -6,13 +6,13 @@ import {
   ComponentOverlay,
   ComponentPositions,
 } from "./components/componentOverlay/ComponentOverlay";
-import { Component, ComponentProps, MESSAGE_TYPES } from "@/lib/types";
 import { findComponent } from "@/lib/utils/findComponent";
 import { updateComponent } from "@/lib/utils/updateComponent";
 import { PropertiesPanel } from "./components/propertiesPanel/PropertiesPanel";
 import { ComponentsPanel } from "./components/componentsPanel/ComponentsPanel";
 import { useDebouncer } from "@/hooks/useDebouncer";
 import { callLLMToParseTranscript } from "@/lib/utils/callLLMToParseTranscript";
+import { Component, ComponentProps, MESSAGE_TYPES } from "@saybuild/shared";
 
 export type Message = {
   type: string;

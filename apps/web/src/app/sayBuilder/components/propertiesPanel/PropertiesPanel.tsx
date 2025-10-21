@@ -1,11 +1,11 @@
 import {
-  BoxComponentProps,
-  ButtonComponentProps,
   Component,
   COMPONENT_TYPE,
   ComponentProps,
   TextComponentProps,
-} from "@/lib/types";
+  BoxComponentProps,
+  ButtonComponentProps,
+} from "@saybuild/shared";
 import { TextInput } from "./TextInput";
 import { NumberInput } from "./NumberInput";
 

@@ -1,4 +1,4 @@
-import { Component, COMPONENT_TYPE } from "../types";
+import { Component, COMPONENT_TYPE } from "@saybuild/shared";
 
 export const updateComponent = (
   componentTree: Component,
