@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { SAMPLE_DATA } from "../pageRenderer/library/sample-data";
 import { BuiderHeader } from "./components/builderHeader/BuiderHeader";
 import {
   ComponentOverlay,
@@ -20,15 +19,31 @@ export type Message = {
 };
 
 export default function SayBuilderPage() {
-  const [componentTree, setComponentTree] = useState<Component>(SAMPLE_DATA);
+  const [componentTree, setComponentTree] = useState<Component | null>(null);
+
+  useEffect(() => {
+    const fetchComponentTree = async () => {
+      try {
+        const response = await fetch("/api/tree");
+        const data: Component = await response.json();
+        setComponentTree(data);
+      } catch (error) {
+        console.error("Error fetching component tree:", error);
+      }
+    };
+
+    fetchComponentTree();
+  }, []);
+
   const [componentPositions, setComponentPositions] = useState<
     ComponentPositions[]
   >([]);
   const [selectedComponentKey, setSelectedComponentKey] = useState<string>(
-    componentTree.key
+    componentTree ? componentTree.key : ""
   );
 
-  const selectedComponent = findComponent(componentTree, selectedComponentKey);
+  const selectedComponent =
+    componentTree && findComponent(componentTree, selectedComponentKey);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const debouncedComponentTree = useDebouncer(componentTree, 300);
 
@@ -46,12 +61,9 @@ export default function SayBuilderPage() {
     propName: ComponentProps,
     componentKeyToUpdate: string
   ) => {
-    const updatedTree = updateComponent(
-      componentTree,
-      componentKeyToUpdate,
-      propName,
-      value
-    );
+    const updatedTree =
+      componentTree &&
+      updateComponent(componentTree, componentKeyToUpdate, propName, value);
     setComponentTree(updatedTree);
   };
   const [showAliases, setShowAliases] = useState(false);
@@ -75,6 +87,7 @@ export default function SayBuilderPage() {
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
       if (e.origin !== "http://localhost:3000") return;
+      if (debouncedComponentTree === null) return;
 
       switch (e.data.type) {
         case MESSAGE_TYPES.HOST_READY: {
@@ -101,6 +114,7 @@ export default function SayBuilderPage() {
   }, [debouncedComponentTree]);
 
   useEffect(() => {
+    if (debouncedComponentTree === null) return;
     sendMessageToHost({
       type: MESSAGE_TYPES.UPDATE_COMPONENTS,
       components: debouncedComponentTree,

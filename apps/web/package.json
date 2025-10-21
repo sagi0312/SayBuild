@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "chokidar": "^4.0.3",
     "clsx": "^2.1.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "next": "15.4.5",
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@saybuild/shared": "workspace:*",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -30,7 +32,6 @@
     "eslint-config-next": "15.4.5",
     "prettier": "^3.6.2",
     "tailwindcss": "^4",
-    "typescript": "^5",
-    "@saybuild/shared": "workspace:*"
+    "typescript": "^5"
   }
 }
