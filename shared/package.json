@@ -1,14 +1,27 @@
 {
   "name": "@saybuild/shared",
   "version": "1.0.0",
-  "description": "Shared types and constants for SayBuild",
+  "description": "Shared types and utilities for SayBuild",
   "type": "module",
-  "main": "./types.ts",
-  "types": "./types.ts",
+  "main": "./dist/types.js",
+  "types": "./dist/types.d.ts",
   "exports": {
-    ".": "./types.ts"
+    ".": {
+      "types": "./dist/types.d.ts",
+      "default": "./dist/types.js"
+    },
+    "./utils/findComponentByKey": {
+      "types": "./dist/utils/findComponentByKey.d.ts",
+      "default": "./dist/utils/findComponentByKey.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/findComponentByKey.d.ts",
+      "default": "./dist/utils/findComponentByKey.js"
+    }
   },
-  "scripts": {},
+  "scripts": {
+    "build": "tsc"
+  },
   "keywords": [
     "saybuild",
     "types",

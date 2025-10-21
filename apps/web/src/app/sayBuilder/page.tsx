@@ -5,13 +5,13 @@ import {
   ComponentOverlay,
   ComponentPositions,
 } from "./components/componentOverlay/ComponentOverlay";
-import { findComponent } from "@/lib/utils/findComponent";
 import { updateComponent } from "@/lib/utils/updateComponent";
 import { PropertiesPanel } from "./components/propertiesPanel/PropertiesPanel";
 import { ComponentsPanel } from "./components/componentsPanel/ComponentsPanel";
 import { useDebouncer } from "@/hooks/useDebouncer";
 import { callLLMToParseTranscript } from "@/lib/utils/callLLMToParseTranscript";
 import { Component, ComponentProps, MESSAGE_TYPES } from "@saybuild/shared";
+import { findComponentByKey } from "@saybuild/shared/utils/findComponentByKey";
 
 export type Message = {
   type: string;
@@ -43,7 +43,7 @@ export default function SayBuilderPage() {
   );
 
   const selectedComponent =
-    componentTree && findComponent(componentTree, selectedComponentKey);
+    componentTree && findComponentByKey(componentTree, selectedComponentKey);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const debouncedComponentTree = useDebouncer(componentTree, 300);
 

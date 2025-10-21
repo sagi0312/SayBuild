@@ -4,19 +4,21 @@
   "private": true,
   "type": "module",
   "bin": {
-    "services": "./build/index.js"
+    "component-tree-services": "./build/src/index.js"
   },
   "scripts": {
-    "build": "tsc && chmod 755 build/index.js"
+    "build": "tsc && chmod 755 build/src/index.js"
   },
   "files": [
     "build"
   ],
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.4",
-    "@saybuild/shared": "workspace:*"
+    "@modelcontextprotocol/sdk": "^1.20.1",
+    "@saybuild/shared": "workspace:*",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0"
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
   }
 }

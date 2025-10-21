@@ -1,13 +1,17 @@
 import fs from "fs/promises";
 import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 import type { Component } from "@saybuild/shared";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 export class TreeReader {
   private dataPath: string;
 
   constructor() {
-    // Path to data/component-tree.json from the compiled dist folder
-    this.dataPath = path.join(__dirname, "../data/component-tree.json");
+    // Path to data/component-tree.json from the compiled build folder
+    this.dataPath = path.join(__dirname, "../../../data/component-tree.json");
   }
   /**
    * READ: Get the entire component tree from disk
