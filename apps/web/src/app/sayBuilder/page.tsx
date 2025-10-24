@@ -5,7 +5,6 @@ import {
   ComponentOverlay,
   ComponentPositions,
 } from "./components/componentOverlay/ComponentOverlay";
-import { updateComponent } from "@/lib/utils/updateComponent";
 import { PropertiesPanel } from "./components/propertiesPanel/PropertiesPanel";
 import { ComponentsPanel } from "./components/componentsPanel/ComponentsPanel";
 import { useDebouncer } from "@/hooks/useDebouncer";
@@ -56,16 +55,21 @@ export default function SayBuilderPage() {
     }
   };
 
-  const handleOnChange = (
+  const handleOnChange = async (
     value: string | number,
     propName: ComponentProps,
     componentKeyToUpdate: string
   ) => {
-    const updatedTree =
-      componentTree &&
-      updateComponent(componentTree, componentKeyToUpdate, propName, value);
-    setComponentTree(updatedTree);
+    await fetch("/api/component", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        componentKey: componentKeyToUpdate,
+        props: { [propName]: value },
+      }),
+    });
   };
+
   const [showAliases, setShowAliases] = useState(false);
   const aliasTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
