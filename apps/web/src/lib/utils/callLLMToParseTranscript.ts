@@ -1,3 +1,23 @@
 export async function callLLMToParseTranscript(transcript: string) {
-  // Placeholder implementation - replace with actual LLM call
+  try {
+    const response = await fetch("/api/tree", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ transcript }),
+    });
+
+    const data = await response.json();
+
+    return {
+      success: data.success,
+      message: data.message,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to call API",
+    };
+  }
 }

@@ -1,14 +1,14 @@
 {
-  "key": "cbd4af97-f76d-4c62-9f81-020274ae07bd",
-  "alias": "cbd4",
+  "key": "0a7aa402-3cc8-4634-8091-4decb536057f",
+  "alias": "0a7a",
   "type": "Box",
   "props": {
     "backgroundColor": "#c4f9edff",
     "padding": 50,
     "children": [
       {
-        "key": "23e14de2-e018-43bc-9a45-69907eadfd4e",
-        "alias": "23e1",
+        "key": "22ab9f61-b423-4ad8-ba6d-1da050a45315",
+        "alias": "22ab",
         "type": "Text",
         "props": {
           "color": "#3980eaff",
@@ -18,8 +18,8 @@
         }
       },
       {
-        "key": "3300344e-0e4b-40ca-a63e-33c3d1343e9a",
-        "alias": "3300",
+        "key": "4347b1c4-7702-47df-af72-6f2bfeb5385f",
+        "alias": "4347",
         "type": "Text",
         "props": {
           "color": "black",
@@ -29,8 +29,8 @@
         }
       },
       {
-        "key": "704c5cfd-1049-4647-acfd-f25061b1ccca",
-        "alias": "704c",
+        "key": "9bd58aa7-cd56-4c20-80b8-3c00d35501f2",
+        "alias": "9bd5",
         "type": "Box",
         "props": {
           "padding": 16,
@@ -38,8 +38,8 @@
           "backgroundColor": "#4e39eaff",
           "children": [
             {
-              "key": "58506e31-2601-4d18-bf74-68b30d2464ed",
-              "alias": "5850",
+              "key": "6f5865f3-644b-4871-bae5-5c3ca6836bcf",
+              "alias": "6f58",
               "type": "Text",
               "props": {
                 "color": "white",
@@ -50,29 +50,29 @@
         }
       },
       {
-        "key": "b1ecb866-5d0a-4edc-b897-9440f20d43ca",
-        "alias": "b1ec",
+        "key": "465367a5-9e6a-4884-b300-236f4c4f30af",
+        "alias": "4653",
         "type": "Box",
         "props": {
           "padding": 16,
           "width": 200,
-          "backgroundColor": "black",
+          "backgroundColor": "green",
           "children": [
             {
-              "key": "9248fede-c2c6-4a96-9661-40f20243aa96",
-              "alias": "9248",
+              "key": "283c5dc1-3e0f-4630-b242-8e7084263fc0",
+              "alias": "283c",
               "type": "Text",
               "props": {
                 "color": "white",
-                "text": "TRY ME"
+                "text": "REQUEST A DEMO"
               }
             }
           ]
         }
       },
       {
-        "key": "9ea56726-bb9e-47ed-8b7d-9cd2786bc96a",
-        "alias": "9ea5",
+        "key": "344fd659-5104-4f3a-8221-f801149a6b31",
+        "alias": "344f",
         "type": "Button",
         "props": {
           "text": "LEARN MORE",

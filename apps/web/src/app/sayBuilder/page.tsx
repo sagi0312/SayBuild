@@ -82,8 +82,15 @@ export default function SayBuilderPage() {
   };
 
   const handleTranscriptChange = async (transcript: string) => {
-    const commands = await callLLMToParseTranscript(transcript);
+    const result = await callLLMToParseTranscript(transcript);
+
+    if (result.success) {
+      console.log("Success!", result.message);
+    } else {
+      console.log("Failed:", result.message);
+    }
   };
+
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
       if (e.origin !== "http://localhost:3000") return;
