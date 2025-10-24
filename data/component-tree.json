@@ -78,6 +78,15 @@
           "text": "LEARN MORE",
           "backgroundColor": "gray"
         }
+      },
+      {
+        "key": "c4f998ad-82bf-4f2a-957c-0c8fc14906b8",
+        "alias": "c4f9",
+        "type": "Button",
+        "props": {
+          "text": "Welcome",
+          "backgroundColor": "red"
+        }
       }
     ]
   }

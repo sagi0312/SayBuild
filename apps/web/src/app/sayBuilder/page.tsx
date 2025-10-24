@@ -8,7 +8,7 @@ import {
 import { PropertiesPanel } from "./components/propertiesPanel/PropertiesPanel";
 import { ComponentsPanel } from "./components/componentsPanel/ComponentsPanel";
 import { useDebouncer } from "@/hooks/useDebouncer";
-import { callLLMToParseTranscript } from "@/lib/utils/callLLMToParseTranscript";
+import { callLLMToParseTranscript } from "@/lib/callLLMToParseTranscript";
 import { Component, ComponentProps, MESSAGE_TYPES } from "@saybuild/shared";
 import { findComponentByKey } from "@saybuild/shared/utils/findComponentByKey";
 
@@ -20,18 +20,40 @@ export type Message = {
 export default function SayBuilderPage() {
   const [componentTree, setComponentTree] = useState<Component | null>(null);
 
+  const fetchComponentTree = async () => {
+    try {
+      const response = await fetch("/api/tree");
+      const data: Component = await response.json();
+      setComponentTree(data);
+    } catch (error) {
+      console.error("Error fetching component tree:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchComponentTree = async () => {
-      try {
-        const response = await fetch("/api/tree");
-        const data: Component = await response.json();
-        setComponentTree(data);
-      } catch (error) {
-        console.error("Error fetching component tree:", error);
+    fetchComponentTree();
+  }, []);
+
+  useEffect(() => {
+    const eventSource = new EventSource("/api/sse");
+
+    eventSource.onmessage = async (event) => {
+      if (event.data === "update") {
+        console.log("File updated, refetching tree...");
+
+        // Refetch the tree
+        fetchComponentTree();
       }
     };
 
-    fetchComponentTree();
+    eventSource.onerror = () => {
+      console.error("SSE connection error");
+      eventSource.close();
+    };
+
+    return () => {
+      eventSource.close();
+    };
   }, []);
 
   const [componentPositions, setComponentPositions] = useState<
