@@ -91,7 +91,7 @@ saybuild/
 
 ### 🎤 Voice Commands
 
-- **Add components**: "Add a blue button"
+- **Add components**: "Add a blue welcome button"
 - **Update components**: "Change the Welcome button to red"
 - **Delete components**: "Delete the Learn More button"
 
@@ -126,7 +126,7 @@ saybuild/
 1. **Clone the repository**
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/sagi0312/SayBuild.git
 cd saybuild
 ```
 
@@ -140,7 +140,7 @@ pnpm install
 
 ```bash
 cd apps/web
-cp .env.example .env.local
+cp .env.local
 ```
 
 Add your Anthropic API key to `.env.local`:
@@ -163,7 +163,7 @@ cd apps/web
 pnpm dev
 ```
 
-Visit `http://localhost:3000/sayBuilder`
+Visit `http://localhost:3000`
 
 ## How It Works
 
@@ -361,21 +361,20 @@ Sends `data: update` when component-tree.json changes
 
 ### Adding New Component Types
 
-1. **Update shared types** (`packages/shared/types.ts`)
+1. **Update shared types** (`shared/types.ts`)
 
 ```typescript
 export enum COMPONENT_TYPE {
   Box = "Box",
   Text = "Text",
   Button = "Button",
-  Input = "Input", // New type
 }
 ```
 
-2. **Update MCP tool schema** (`packages/component-tree-services/src/index.ts`)
+2. **Update MCP tool schema** (`component-tree-services/src/index.ts`)
 
 ```typescript
-type: { type: "string", enum: ["Box", "Text", "Button", "Input"] }
+type: { type: "string", enum: ["Box", "Text", "Button"] }
 ```
 
 3. **Add component renderer** (`apps/web/src/app/pageRenderer/page.tsx`)
