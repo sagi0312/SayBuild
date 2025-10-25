@@ -9,8 +9,17 @@ export async function GET(req: NextRequest) {
       controller.enqueue(encoder.encode("data: connected\n\n"));
 
       // Start watching and notify on changes
-      startFileWatcher(() => {
-        controller.enqueue(encoder.encode("data: update\n\n"));
+      const watcher = startFileWatcher(() => {
+        try {
+          controller.enqueue(encoder.encode("data: update\n\n"));
+        } catch (error) {
+          // Controller is closed, ignore
+        }
+      });
+
+      // Clean up when client disconnects
+      req.signal.addEventListener("abort", () => {
+        watcher.close();
       });
     },
   });

@@ -5,7 +5,7 @@ let watcher: FSWatcher | null = null;
 
 export function startFileWatcher(callback: () => void) {
   if (watcher) {
-    return watcher; // Already watching
+    return watcher;
   }
 
   watcher = chokidar.watch(dataPath, {
