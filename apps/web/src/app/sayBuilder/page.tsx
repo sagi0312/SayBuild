@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { BuiderHeader } from "./components/builderHeader/BuiderHeader";
 import {
   ComponentOverlay,
   ComponentPositions,
@@ -13,6 +12,7 @@ import { Component, ComponentProps, MESSAGE_TYPES } from "@saybuild/shared";
 import { findComponentByKey } from "@saybuild/shared/utils/findComponentByKey";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { BuilderHeader } from "./components/builderHeader/BuilderHeader";
 
 export type Message = {
   type: string;
@@ -177,7 +177,7 @@ export default function SayBuilderPage() {
 
   return (
     <div className="h-screen flex flex-col">
-      <BuiderHeader debouncedComponentTree={debouncedComponentTree} />
+      <BuilderHeader debouncedComponentTree={debouncedComponentTree} />
       <div className="flex-1 flex overflow-hidden">
         <aside className="w-80 bg-white border-r">
           <ComponentsPanel
