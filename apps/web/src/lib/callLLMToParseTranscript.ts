@@ -1,11 +1,14 @@
-export async function callLLMToParseTranscript(transcript: string) {
+export async function callLLMToParseTranscript(
+  transcript: string,
+  pageId: string
+) {
   try {
     const response = await fetch("/api/tree", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ transcript }),
+      body: JSON.stringify({ transcript, pageId }),
     });
 
     const data = await response.json();

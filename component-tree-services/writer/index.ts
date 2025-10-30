@@ -6,15 +6,30 @@ import { dirname } from "path";
 import { Component, COMPONENT_TYPE } from "@saybuild/shared";
 import { randomUUID } from "crypto";
 import { findComponentByKey } from "@saybuild/shared/utils/findComponentByKey";
+import { createClient } from "@supabase/supabase-js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export class TreeWriter {
-  private dataPath: string;
+  private supabase;
+  private pageId: string;
 
   constructor() {
-    this.dataPath = path.join(__dirname, "../../../data/component-tree.json");
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_ANON_KEY;
+    const pageId = process.env.PAGE_ID;
+
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error("Missing Supabase environment variables");
+    }
+
+    if (!pageId) {
+      throw new Error("Missing PAGE_ID environment variable");
+    }
+
+    this.supabase = createClient(supabaseUrl, supabaseKey);
+    this.pageId = pageId;
   }
 
   private generateAlias(key: string): string {
@@ -22,12 +37,29 @@ export class TreeWriter {
   }
 
   private async readTree(): Promise<Component> {
-    const fileContent = await fs.readFile(this.dataPath, "utf-8");
-    return JSON.parse(fileContent);
+    const { data, error } = await this.supabase
+      .from("pages")
+      .select("component_tree")
+      .eq("id", this.pageId)
+      .single();
+
+    if (error) {
+      throw new Error(`Failed to fetch tree: ${error.message}`);
+    }
+
+    return data.component_tree as Component;
   }
 
   private async writeTree(tree: Component): Promise<void> {
-    await fs.writeFile(this.dataPath, JSON.stringify(tree, null, 2), "utf-8");
+    const { error } = await this.supabase
+      .from("pages")
+      .update({ component_tree: tree })
+      .eq("id", this.pageId)
+      .select();
+
+    if (error) {
+      throw new Error(`Failed to update tree: ${error.message}`);
+    }
   }
 
   // ==================== PUBLIC API (exposed to LLM) ====================
@@ -40,7 +72,6 @@ export class TreeWriter {
     type: keyof typeof COMPONENT_TYPE,
     props: Record<string, string | number> = {}
   ) {
-    console.error("addComponent called with:", { parentKey, type, props });
     const newComponentKey = randomUUID();
     const newComponentAlias = this.generateAlias(newComponentKey);
 
@@ -52,16 +83,16 @@ export class TreeWriter {
     };
 
     const tree = await this.readTree();
-    console.error("Tree root key:", tree.key);
     const parentComponent: Component | null = findComponentByKey(
       tree,
       parentKey
     );
-    console.error("Found parent:", parentComponent ? "YES" : "NO");
+
     if (!parentComponent) {
       console.error("Available keys in tree:", JSON.stringify(tree, null, 2));
       throw new Error(`Parent component not found`);
     }
+
     if (parentComponent.type !== COMPONENT_TYPE.Box) {
       throw new Error(
         `Cannot add child to component of type ${parentComponent.type}. Only Box components can have children.`

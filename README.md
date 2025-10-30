@@ -1,454 +1,235 @@
 # SayBuild
 
-A voice-driven visual page builder that lets you create and modify UI components through natural language commands.
+A voice-driven visual page builder powered by Claude AI, Supabase, and Next.js. Build web pages by simply speaking.
 
-## Overview
+## What It Does
 
-SayBuild combines voice input, AI (Claude), and the Model Context Protocol (MCP) to enable real-time UI building through spoken commands. Changes are reflected instantly in a live preview with automatic synchronization across the application.
+Speak naturally: **"Add a blue button"** → Button appears instantly.
 
-## Architecture
+SayBuild lets multiple users create and manage their own projects with Google OAuth authentication, real-time updates, and AI-powered voice commands.
 
-### Monorepo Structure
+## Project Structure
 
 ```
 saybuild/
-├── apps/
-│   └── web/                    # Next.js application
-│       ├── src/
-│       │   ├── app/
-│       │   │   ├── api/        # API routes
-│       │   │   │   ├── tree/   # Component tree CRUD
-│       │   │   │   ├── component/ # Direct component updates
-│       │   │   │   └── sse/    # Server-Sent Events
-│       │   │   ├── sayBuilder/ # Main builder UI
-│       │   │   └── pageRenderer/ # Live preview iframe
-│       │   ├── components/     # React components
-│       │   ├── hooks/          # Custom React hooks
-│       │   └── lib/            # Utilities & helpers
-│       └── package.json
-├── packages/
-│   ├── component-tree-services/  # MCP Server
-│   │   ├── src/
-│   │   │   ├── index.ts        # MCP server entry
-│   │   │   ├── reader/         # Read operations
-│   │   │   └── writer/         # Write operations
-│   │   └── build/              # Compiled output
-│   └── shared/                 # Shared types & utilities
-│       ├── types.ts
-│       └── utils/
-└── data/
-    └── component-tree.json     # Single source of truth
+├── apps/web/              # Next.js app (UI, API routes, auth)
+├── component-tree-services/  # MCP server (AI tool interface)
+└── shared/                # Shared types & utilities
 ```
 
-### Data Flow
+## Tech Stack
 
-```
-┌─────────────────┐
-│  Voice Input    │ (Web Speech API)
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Next.js API    │ (/api/tree POST)
-│  (MCP Client)   │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Claude API     │ (Anthropic)
-│  + MCP Tools    │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  MCP Server     │ (component-tree-services)
-│  Tool Execution │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│ component-tree  │
-│    .json        │ (File Write)
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│   Chokidar      │ (File Watcher)
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│      SSE        │ (Server-Sent Events)
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  React UI       │ (Auto Re-render)
-└─────────────────┘
-```
-
-## Features
-
-### 🎤 Voice Commands
-
-- **Add components**: "Add a blue welcome button"
-- **Update components**: "Change the Welcome button to red"
-- **Delete components**: "Delete the Learn More button"
-
-### 🖱️ Manual Editing
-
-- Click any component to select it
-- Edit properties in the right panel
-- Changes sync instantly via file watcher
-
-### 🔄 Real-time Synchronization
-
-- File watcher detects JSON changes
-- SSE pushes updates to all connected clients
-- Automatic UI re-rendering
-
-### 🧩 Available Components
-
-- **Box**: Container with padding and background color
-- **Text**: Text element with font styling
-- **Button**: Interactive button with text and styling
-
-## Setup
-
-### Prerequisites
-
-- Node.js 18+
-- pnpm 8+
-- Anthropic API key
-
-### Installation
-
-1. **Clone the repository**
-
-```bash
-git clone https://github.com/sagi0312/SayBuild.git
-cd saybuild
-```
-
-2. **Install dependencies**
-
-```bash
-pnpm install
-```
-
-3. **Set up environment variables**
-
-```bash
-cd apps/web
-cp .env.local
-```
-
-Add your Anthropic API key to `.env.local`:
-
-```
-ANTHROPIC_API_KEY=your_api_key_here
-```
-
-4. **Build the MCP server**
-
-```bash
-cd packages/component-tree-services
-pnpm build
-```
-
-5. **Start the development server**
-
-```bash
-cd apps/web
-pnpm dev
-```
-
-Visit `http://localhost:3000`
+- **Frontend**: Next.js 15, React, TypeScript, Tailwind
+- **Backend**: Supabase (Postgres + Auth + Realtime)
+- **AI**: Anthropic Claude via MCP (Model Context Protocol)
+- **Voice**: Web Speech API
 
 ## How It Works
 
-### MCP (Model Context Protocol)
-
-SayBuild uses MCP to connect Claude with your component tree operations:
-
-1. **Next.js acts as MCP Client**: Connects to the MCP server and manages tool execution
-2. **component-tree-services is the MCP Server**: Exposes 4 tools to Claude:
-
-   - `get_tree`: Read the current component structure
-   - `add_component`: Add a new component
-   - `update_component`: Modify existing component
-   - `delete_component`: Remove a component
-
-3. **Claude decides which tools to use**: Based on voice commands, Claude calls the appropriate tools in sequence
-
-### Voice Command Processing
-
-```typescript
-Voice: "Add a blue button"
-  ↓
-Claude thinks: "I need to add a Button component"
-  ↓
-Calls: add_component({
-  parentKey: "root-key",
-  type: "Button",
-  props: { text: "Button", backgroundColor: "blue" }
-})
-  ↓
-MCP Server writes to component-tree.json
-  ↓
-Chokidar detects change
-  ↓
-SSE notifies browser
-  ↓
-React refetches and re-renders
+```
+You speak → Claude understands → MCP tools execute → Database updates → UI refreshes
 ```
 
-### Tool Execution Loop
+**The Flow:**
 
-Claude can use multiple tools in sequence:
+1. Voice command captured by browser
+2. Sent to Claude AI with 4 available tools (add/update/delete/get)
+3. Claude decides which tools to use
+4. MCP server executes database operations
+5. Supabase Realtime broadcasts changes
+6. React UI updates instantly
 
-```typescript
-Voice: "Delete the red Welcome button"
-  ↓
-Step 1: Claude calls get_tree()
-  ↓
-Step 2: Claude analyzes tree, finds button with text "Welcome" and backgroundColor "red"
-  ↓
-Step 3: Claude calls delete_component({
-  parentKey: "parent-key",
-  componentKey: "button-key"
-})
-  ↓
-File updated, UI refreshes
+## Quick Setup
+
+### Prerequisites
+
+- Node.js 18+, pnpm
+- Supabase account (free)
+- Anthropic API key
+- Google Cloud project (for OAuth)
+
+### Installation
+
+```bash
+# Clone and install
+git clone https://github.com/sagi0312/SayBuild.git
+cd saybuild
+pnpm install
+
+# Build MCP server
+cd component-tree-services && pnpm build && cd ..
+
+# Set up environment variables
+cd apps/web
+cp .env.example .env.local
+# Add your keys to .env.local
+
+# Start dev server
+pnpm dev
 ```
+
+### Environment Variables
+
+```env
+# apps/web/.env.local
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+ANTHROPIC_API_KEY=your_anthropic_key
+```
+
+### Database Setup
+
+Run this in Supabase SQL Editor:
+
+```sql
+-- Projects table
+CREATE TABLE projects (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users(id),
+  name TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Pages table (stores component trees as JSONB)
+CREATE TABLE pages (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  project_id UUID REFERENCES projects(id),
+  name TEXT NOT NULL,
+  component_tree JSONB NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Enable RLS
+ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pages ENABLE ROW LEVEL SECURITY;
+
+-- Policies (users can only access their own data)
+CREATE POLICY "Users CRUD own projects" ON projects
+  FOR ALL USING (auth.uid() = user_id);
+
+CREATE POLICY "Users CRUD own pages" ON pages
+  FOR ALL USING (
+    EXISTS (SELECT 1 FROM projects WHERE id = pages.project_id AND user_id = auth.uid())
+  );
+
+CREATE POLICY "Enable realtime" ON pages
+  FOR SELECT USING (true);
+
+-- Enable Realtime
+ALTER PUBLICATION supabase_realtime ADD TABLE pages;
+```
+
+### Google OAuth Setup
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com)
+2. Create project → Enable "Identity Toolkit API"
+3. Create OAuth 2.0 credentials (Web application)
+4. Add redirect URI: `https://[your-project].supabase.co/auth/v1/callback`
+5. Copy Client ID & Secret to Supabase Dashboard → Auth → Providers → Google
+
+## Features
+
+✅ **Multi-user** - Google OAuth, secure data isolation  
+✅ **Voice commands** - "Add button", "Make it red", "Delete text"  
+✅ **Real-time** - See changes instantly via Supabase Realtime  
+✅ **Manual editing** - Click-to-edit properties panel  
+✅ **Projects** - Organize pages into projects
+
+**Available components:** Box, Text, Button
+
+## Voice Command Examples
+
+- "Add a blue welcome button"
+- "Make the button bigger and red"
+- "Change all text to size 24"
+- "Delete the Learn More button"
+
+## MCP Architecture
+
+**MCP (Model Context Protocol)** connects Claude with your database operations:
+
+- **Next.js** = MCP Client (sends commands to Claude)
+- **component-tree-services** = MCP Server (4 tools: get/add/update/delete)
+- **Claude** = Decides which tools to use
+
+Tools get context via environment variables:
+
+- `PAGE_ID` - Which page to modify
+- `SUPABASE_SERVICE_ROLE_KEY` - Database access
 
 ## API Routes
 
-### `GET /api/tree`
-
-Fetch the current component tree
-
-**Response:**
-
-```json
-{
-  "key": "root-key",
-  "type": "Box",
-  "props": {
-    "backgroundColor": "#fff",
-    "children": [...]
-  }
-}
-```
-
-### `POST /api/tree`
-
-Process voice commands via Claude + MCP
-
-**Request:**
-
-```json
-{
-  "transcript": "add a blue button"
-}
-```
-
-**Response:**
-
-```json
-{
-  "success": true,
-  "message": "Command executed successfully"
-}
-```
-
-### `PATCH /api/component`
-
-Directly update a component (used by properties panel)
-
-**Request:**
-
-```json
-{
-  "componentKey": "component-key",
-  "props": {
-    "backgroundColor": "red"
-  }
-}
-```
-
-### `GET /api/sse`
-
-Server-Sent Events endpoint for real-time updates
-
-Sends `data: update` when component-tree.json changes
-
-## MCP Server Tools
-
-### get_tree
-
-```typescript
-{
-  name: "get_tree",
-  description: "Get the current component tree structure",
-  inputSchema: {
-    type: "object",
-    properties: {}
-  }
-}
-```
-
-### add_component
-
-```typescript
-{
-  name: "add_component",
-  description: "Add a new component to the tree",
-  inputSchema: {
-    type: "object",
-    properties: {
-      parentKey: { type: "string" },
-      type: { type: "string", enum: ["Box", "Text", "Button"] },
-      props: { type: "object" }
-    }
-  }
-}
-```
-
-### update_component
-
-```typescript
-{
-  name: "update_component",
-  description: "Update an existing component",
-  inputSchema: {
-    type: "object",
-    properties: {
-      componentKey: { type: "string" },
-      props: { type: "object" }
-    }
-  }
-}
-```
-
-### delete_component
-
-```typescript
-{
-  name: "delete_component",
-  description: "Delete a component from the tree",
-  inputSchema: {
-    type: "object",
-    properties: {
-      parentKey: { type: "string" },
-      componentKey: { type: "string" }
-    }
-  }
-}
-```
-
-## Technology Stack
-
-- **Frontend**: Next.js 15, React, TypeScript, Tailwind CSS
-- **AI**: Anthropic Claude API (claude-sonnet-4-5)
-- **Protocol**: Model Context Protocol (MCP)
-- **File Watching**: Chokidar
-- **Real-time Updates**: Server-Sent Events (SSE)
-- **Voice Input**: Web Speech API
-- **Package Manager**: pnpm (monorepo)
+| Route                | Method | Purpose                |
+| -------------------- | ------ | ---------------------- |
+| `/api/tree?pageId=X` | GET    | Fetch component tree   |
+| `/api/tree`          | POST   | Execute voice command  |
+| `/api/component`     | PATCH  | Update component props |
 
 ## Development
 
-### Adding New Component Types
-
-1. **Update shared types** (`shared/types.ts`)
-
-```typescript
-export enum COMPONENT_TYPE {
-  Box = "Box",
-  Text = "Text",
-  Button = "Button",
-}
-```
-
-2. **Update MCP tool schema** (`component-tree-services/src/index.ts`)
-
-```typescript
-type: { type: "string", enum: ["Box", "Text", "Button"] }
-```
-
-3. **Add component renderer** (`apps/web/src/app/pageRenderer/page.tsx`)
-
-### Testing Voice Commands
-
-Use the microphone button in the UI or test via curl:
+**Test voice commands via curl:**
 
 ```bash
 curl -X POST http://localhost:3000/api/tree \
   -H "Content-Type: application/json" \
-  -d '{"transcript": "add a red button"}'
+  -d '{"transcript": "add a red button", "pageId": "your-page-id"}'
 ```
+
+**Add new component types:**
+
+1. Update `shared/types.ts` enum
+2. Update MCP tool schema in `component-tree-services/src/index.ts`
+3. Add renderer in `apps/web/src/app/pageRenderer/page.tsx`
 
 ## Troubleshooting
 
-### MCP Server Not Found
+**Realtime not working?**
 
-```
-Error: npm error 404 'component-tree-services@*' is not in this registry
-```
+- Check browser console for `SUBSCRIBED` status
+- Verify: `SELECT * FROM pg_publication_tables WHERE pubname = 'supabase_realtime'`
 
-**Solution**: Make sure component-tree-services is added as a workspace dependency in `apps/web/package.json`:
+**Voice commands failing?**
 
-```json
-{
-  "dependencies": {
-    "component-tree-services": "workspace:*"
-  }
-}
-```
+- Ensure service role key is set (not anon key)
+- Check MCP server is built: `cd component-tree-services && pnpm build`
+- Look for errors in terminal
 
-Then run `pnpm install` from the root.
+**Auth issues?**
 
-### SSE Connection Fails
+- Verify Google OAuth redirect URI matches Supabase callback
+- Check `.env.local` has correct Supabase keys
 
-If the SSE connection drops, the browser will automatically attempt to reconnect. Check that:
+## Roadmap
 
-- The `/api/sse` route is accessible
-- The file watcher is running
-- No firewall is blocking the connection
-
-### Claude Not Using Tools
-
-If Claude isn't calling the correct tools:
-
-- Check that the MCP server is built (`pnpm build` in component-tree-services)
-- Verify the ANTHROPIC_API_KEY is set correctly
-- Check the console for tool execution logs
-
-## Future Enhancements
-
-- [ ] Component library with more types
-- [ ] Collaborative editing
-- [ ] Export to code
-- [ ] Visual component tree navigator
-- [ ] Voice command history
-- [ ] Custom component styling
-- [ ] Responsive design preview
+- [ ] Multi-user collaboration (real-time editing on same page)
+- [ ] Project sharing between users
+- [ ] More component types (Image, Input, Select)
+- [ ] Drag-and-drop reordering
+- [ ] Export to React/HTML code
+- [ ] Undo/redo
+- [ ] Component templates
+- [ ] Version Tracking
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+PRs welcome! Areas we need help:
+
+- New component types
+- UI/UX improvements
+- Documentation
 
 ## License
 
 MIT
 
-## Acknowledgments
+## Built With
 
-- Built with [Anthropic Claude](https://www.anthropic.com/)
-- Uses [Model Context Protocol](https://modelcontextprotocol.io/)
-- Inspired by visual page builders and voice-driven interfaces
+- [Anthropic Claude](https://www.anthropic.com/) - AI brain
+- [Supabase](https://supabase.com/) - Backend & auth
+- [Model Context Protocol](https://modelcontextprotocol.io/) - AI-tool standard
+- [Next.js](https://nextjs.org/) - React framework
+
+---
+
+**Build pages with your voice** 🎤 → 🤖 → 🎨

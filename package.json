@@ -2,11 +2,7 @@
   "name": "saybuild",
   "private": true,
   "scripts": {
-    "dev": "pnpm run --parallel dev",
-    "dev:web": "pnpm --filter web dev",
-    "dev:reader": "pnpm --filter reader dev",
-    "dev:writer": "pnpm --filter writer dev",
-    "init-db": "tsx scripts/init-db.ts"
+    "dev:web": "pnpm --filter web dev"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

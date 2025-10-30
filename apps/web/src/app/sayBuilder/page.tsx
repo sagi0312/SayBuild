@@ -11,6 +11,8 @@ import { useDebouncer } from "@/hooks/useDebouncer";
 import { callLLMToParseTranscript } from "@/lib/callLLMToParseTranscript";
 import { Component, ComponentProps, MESSAGE_TYPES } from "@saybuild/shared";
 import { findComponentByKey } from "@saybuild/shared/utils/findComponentByKey";
+import { useSearchParams } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 export type Message = {
   type: string;
@@ -18,13 +20,20 @@ export type Message = {
 };
 
 export default function SayBuilderPage() {
-  const [componentTree, setComponentTree] = useState<Component | null>(null);
+  const searchParams = useSearchParams();
+  const pageId = searchParams.get("pageId");
+  const [componentTree, setComponentTree] = useState<Component>();
 
   const fetchComponentTree = async () => {
+    if (!pageId) {
+      console.error("No pageId provided");
+      return;
+    }
+
     try {
-      const response = await fetch("/api/tree");
-      const data: Component = await response.json();
-      setComponentTree(data);
+      const response = await fetch(`/api/tree?pageId=${pageId}`);
+      const componentTree = await response.json();
+      setComponentTree(componentTree);
     } catch (error) {
       console.error("Error fetching component tree:", error);
     }
@@ -35,26 +44,33 @@ export default function SayBuilderPage() {
   }, []);
 
   useEffect(() => {
-    const eventSource = new EventSource("/api/sse");
+    if (!pageId) return;
 
-    eventSource.onmessage = async (event) => {
-      if (event.data === "update") {
-        console.log("File updated, refetching tree...");
+    const supabase = createClient();
 
-        // Refetch the tree
-        fetchComponentTree();
-      }
-    };
-
-    eventSource.onerror = () => {
-      console.error("SSE connection error");
-      eventSource.close();
-    };
+    const channel = supabase
+      .channel(`page:${pageId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "pages",
+          filter: `id=eq.${pageId}`,
+        },
+        (payload) => {
+          setComponentTree(payload.new.component_tree);
+        }
+      )
+      .subscribe((status) => {
+        console.log("📡 Subscription status:", status);
+      });
 
     return () => {
-      eventSource.close();
+      console.log("🔌 Unsubscribing from channel");
+      supabase.removeChannel(channel);
     };
-  }, []);
+  }, [pageId]);
 
   const [componentPositions, setComponentPositions] = useState<
     ComponentPositions[]
@@ -88,6 +104,7 @@ export default function SayBuilderPage() {
       body: JSON.stringify({
         componentKey: componentKeyToUpdate,
         props: { [propName]: value },
+        pageId: pageId,
       }),
     });
   };
@@ -108,7 +125,11 @@ export default function SayBuilderPage() {
   };
 
   const handleTranscriptChange = async (transcript: string) => {
-    const result = await callLLMToParseTranscript(transcript);
+    if (!pageId) {
+      console.error("No pageId provided");
+      return;
+    }
+    const result = await callLLMToParseTranscript(transcript, pageId);
 
     if (result.success) {
       console.log("Success!", result.message);
@@ -183,13 +204,14 @@ export default function SayBuilderPage() {
             showAliases={showAliases}
           />
         </main>
-
-        <aside className="w-80 bg-white border-l">
-          <PropertiesPanel
-            selectedComponent={selectedComponent}
-            onChange={handleOnChange}
-          />
-        </aside>
+        {selectedComponent && (
+          <aside className="w-80 bg-white border-l">
+            <PropertiesPanel
+              selectedComponent={selectedComponent}
+              onChange={handleOnChange}
+            />
+          </aside>
+        )}
       </div>
     </div>
   );

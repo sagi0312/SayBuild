@@ -2,21 +2,38 @@ import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
-import fs from "fs/promises";
-import path from "path";
 import type { Component } from "@saybuild/shared";
 import type { MessageParam } from "@anthropic-ai/sdk/resources/messages.mjs";
+import { createClient } from "@/lib/supabase/server";
 
-export const dataPath = path.join(
-  process.cwd(),
-  "../../data/component-tree.json"
-);
-
-export async function GET() {
+export async function GET(request: Request): Promise<NextResponse> {
   try {
-    const fileContent = await fs.readFile(dataPath, "utf-8");
-    const tree: Component = JSON.parse(fileContent);
-    return NextResponse.json(tree);
+    const { searchParams } = new URL(request.url);
+    const pageId = searchParams.get("pageId");
+
+    if (!pageId) {
+      return NextResponse.json(
+        { error: "pageId is required" },
+        { status: 400 }
+      );
+    }
+
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from("pages")
+      .select("component_tree")
+      .eq("id", pageId)
+      .single();
+
+    if (error) {
+      return NextResponse.json(
+        { error: "Failed to fetch page" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(data.component_tree);
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to read component tree" },
@@ -27,10 +44,31 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const { transcript } = await req.json();
+    const { transcript, pageId } = await req.json();
 
-    const fileContent = await fs.readFile(dataPath, "utf-8");
-    const tree: Component = JSON.parse(fileContent);
+    if (!pageId) {
+      return NextResponse.json(
+        { error: "pageId is required" },
+        { status: 400 }
+      );
+    }
+
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from("pages")
+      .select("component_tree")
+      .eq("id", pageId)
+      .single();
+
+    if (error || !data) {
+      return NextResponse.json(
+        { error: "Failed to fetch page" },
+        { status: 500 }
+      );
+    }
+
+    const tree: Component = data.component_tree;
     const rootKey = tree.key;
 
     const anthropic = new Anthropic({
@@ -39,6 +77,11 @@ export async function POST(req: Request) {
     const transport = new StdioClientTransport({
       command: "npx",
       args: ["component-tree-services"],
+      env: {
+        SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        SUPABASE_ANON_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY!,
+        PAGE_ID: pageId,
+      },
     });
     const mcpClient = new Client(
       {
@@ -110,15 +153,10 @@ export async function POST(req: Request) {
         const toolResults = [];
 
         for (const toolUse of toolUseBlocks) {
-          console.log("Claude wants to use tool:", toolUse.name);
-          console.log("With arguments:", toolUse.input);
-
           const result = await mcpClient.callTool({
             name: toolUse.name,
             arguments: toolUse.input as Record<string, unknown>,
           });
-
-          console.log("Tool result:", result);
 
           toolResults.push({
             type: "tool_result" as const,

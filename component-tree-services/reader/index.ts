@@ -1,25 +1,42 @@
-import fs from "fs/promises";
-import path from "path";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
+import { createClient } from "@supabase/supabase-js";
 import type { Component } from "@saybuild/shared";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 export class TreeReader {
-  private dataPath: string;
+  private supabase;
+  private pageId: string;
 
   constructor() {
-    // Path to data/component-tree.json from the compiled build folder
-    this.dataPath = path.join(__dirname, "../../../data/component-tree.json");
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_ANON_KEY;
+    const pageId = process.env.PAGE_ID;
+
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error("Missing Supabase environment variables");
+    }
+
+    if (!pageId) {
+      throw new Error("Missing PAGE_ID environment variable");
+    }
+
+    this.supabase = createClient(supabaseUrl, supabaseKey);
+    this.pageId = pageId;
   }
+
   /**
-   * READ: Get the entire component tree from disk
-   * Reads fresh data every time (picks up changes from Writer)
+   * READ: Get the entire component tree from database
    */
   async getTree(): Promise<Component> {
-    const fileContent = await fs.readFile(this.dataPath, "utf-8");
-    return JSON.parse(fileContent);
+    const { data, error } = await this.supabase
+      .from("pages")
+      .select("component_tree")
+      .eq("id", this.pageId)
+      .single();
+
+    if (error) {
+      throw new Error(`Failed to fetch tree: ${error.message}`);
+    }
+
+    return data.component_tree as Component;
   }
 }
 

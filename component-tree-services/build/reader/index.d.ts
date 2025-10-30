@@ -1,10 +1,10 @@
 import type { Component } from "@saybuild/shared";
 export declare class TreeReader {
-    private dataPath;
+    private supabase;
+    private pageId;
     constructor();
     /**
-     * READ: Get the entire component tree from disk
-     * Reads fresh data every time (picks up changes from Writer)
+     * READ: Get the entire component tree from database
      */
     getTree(): Promise<Component>;
 }

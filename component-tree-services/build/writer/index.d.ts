@@ -1,6 +1,7 @@
 import { Component, COMPONENT_TYPE } from "@saybuild/shared";
 export declare class TreeWriter {
-    private dataPath;
+    private supabase;
+    private pageId;
     constructor();
     private generateAlias;
     private readTree;
