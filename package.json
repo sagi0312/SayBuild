@@ -2,7 +2,7 @@
   "name": "saybuild",
   "private": true,
   "scripts": {
-    "dev": "pnpm build:mcp && pnpm --filter web dev",
+    "dev": "pnpm --filter @saybuild/shared build && pnpm --filter web dev",
     "build:mcp": "pnpm --filter component-tree-services build",
     "build": "pnpm build:mcp && pnpm --filter web build"
   },

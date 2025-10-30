@@ -124,17 +124,19 @@ export default function SayBuilderPage() {
     }
   };
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const handleTranscriptChange = async (transcript: string) => {
     if (!pageId) {
       console.error("No pageId provided");
       return;
     }
-    const result = await callLLMToParseTranscript(transcript, pageId);
-
-    if (result.success) {
-      console.log("Success!", result.message);
-    } else {
-      console.log("Failed:", result.message);
+    try {
+      setErrorMessage(null);
+      await callLLMToParseTranscript(transcript, pageId);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      setErrorMessage(message);
     }
   };
 
@@ -178,6 +180,11 @@ export default function SayBuilderPage() {
   return (
     <div className="h-screen flex flex-col">
       <BuilderHeader debouncedComponentTree={debouncedComponentTree} />
+      {errorMessage && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          {errorMessage}
+        </div>
+      )}
       <div className="flex-1 flex overflow-hidden">
         <aside className="w-80 bg-white border-r">
           <ComponentsPanel

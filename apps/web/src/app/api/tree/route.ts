@@ -5,6 +5,7 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 import type { Component } from "@saybuild/shared";
 import type { MessageParam } from "@anthropic-ai/sdk/resources/messages.mjs";
 import { createClient } from "@/lib/supabase/server";
+import { DAILY_LIMIT } from "@saybuild/shared";
 
 export async function GET(request: Request): Promise<NextResponse> {
   try {
@@ -54,6 +55,45 @@ export async function POST(req: Request) {
     }
 
     const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    // Check/update usage
+    const today = new Date().toISOString().split("T")[0];
+
+    const { data: usage, error: usageError } = await supabase
+      .from("user_usage")
+      .select("command_count")
+      .eq("user_id", user.id)
+      .eq("date", today)
+      .single();
+
+    if (usage && usage.command_count >= DAILY_LIMIT) {
+      return NextResponse.json(
+        {
+          error: "Daily limit reached",
+          limit: DAILY_LIMIT,
+          used: usage.command_count,
+          resetsAt: new Date(today + "T00:00:00Z").getTime() + 86400000,
+        },
+        { status: 429 }
+      );
+    }
+
+    // Increment usage (upsert)
+    await supabase.from("user_usage").upsert(
+      {
+        user_id: user.id,
+        date: today,
+        command_count: (usage?.command_count || 0) + 1,
+      },
+      {
+        onConflict: "user_id,date",
+      }
+    );
 
     const { data, error } = await supabase
       .from("pages")
@@ -197,6 +237,7 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error("Error:", error);
+
     return NextResponse.json(
       { success: false, message: "Failed to execute command" },
       { status: 500 }

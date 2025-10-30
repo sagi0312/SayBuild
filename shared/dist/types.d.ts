@@ -56,3 +56,4 @@ export declare const MESSAGE_TYPES: {
     UPDATE_COMPONENTS: string;
     COMPONENT_POSITIONS: string;
 };
+export declare const DAILY_LIMIT = 3;

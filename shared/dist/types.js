@@ -26,4 +26,5 @@ export const MESSAGE_TYPES = {
     UPDATE_COMPONENTS: "UPDATE_COMPONENTS",
     COMPONENT_POSITIONS: "COMPONENT_POSITIONS",
 };
+export const DAILY_LIMIT = 3;
 //# sourceMappingURL=types.js.map
