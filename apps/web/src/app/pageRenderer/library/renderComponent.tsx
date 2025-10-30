@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { COMPONENT_LIBRARY } from "./componentLibrary";
-import { Component } from "@/lib/types";
+import { Component } from "@saybuild/shared";
 
 export function renderComponent(component: Component): ReactNode {
   const entry = COMPONENT_LIBRARY.get(component.type);
