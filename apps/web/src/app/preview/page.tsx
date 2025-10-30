@@ -23,7 +23,14 @@ function PreviewContent() {
   }, [searchParams]);
 
   if (!components) {
-    return <div className="p-8">Loading preview...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading preview...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -35,7 +42,16 @@ function PreviewContent() {
 
 export default function PreviewPage() {
   return (
-    <Suspense fallback={<div>Loading preview...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading preview...</p>
+          </div>
+        </div>
+      }
+    >
       <PreviewContent />
     </Suspense>
   );
