@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { FaMicrophone } from "react-icons/fa";
 import { FaPaperPlane } from "react-icons/fa";
 import clsx from "clsx";
+import { ModeToggle } from "./ModeToggle";
 interface WindowWithSpeechRecognition extends Window {
   webkitSpeechRecognition: new () => SpeechRecognitionInstance;
 }
@@ -33,6 +34,7 @@ export const VoicePanel = ({
 }: VoicePanelProps) => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState("");
+  const [mode, setMode] = useState<"voice" | "text">("voice");
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const finalRef = useRef<string>("");
   const prevTranscriptRef = useRef("");
@@ -115,7 +117,8 @@ export const VoicePanel = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 flex justify-center flex-col items-center">
+      <ModeToggle mode={mode} onModeChange={setMode} />
       {/* Microphone Button */}
       <div
         className={clsx(
