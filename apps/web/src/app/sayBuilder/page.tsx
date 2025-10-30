@@ -108,7 +108,7 @@ function SayBuilderContent() {
     if (iframeRef.current?.contentWindow) {
       iframeRef.current.contentWindow.postMessage(
         message,
-        "http://localhost:3000"
+        window.location.origin
       );
     }
   };
@@ -162,7 +162,7 @@ function SayBuilderContent() {
 
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
-      if (e.origin !== "http://localhost:3000") return;
+      if (e.origin !== window.location.origin) return;
       if (debouncedComponentTree === null) return;
 
       switch (e.data.type) {

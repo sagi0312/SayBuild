@@ -34,14 +34,14 @@ export default function PageRenderer() {
           type: MESSAGE_TYPES.COMPONENT_POSITIONS,
           positions,
         },
-        "http://localhost:3000"
+        window.location.origin
       );
     }
   };
 
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
-      if (e.origin !== "http://localhost:3000") return;
+      if (e.origin !== window.location.origin) return;
 
       if (e.data.type === "UPDATE_COMPONENTS") {
         setComponents(e.data.components);
@@ -54,7 +54,7 @@ export default function PageRenderer() {
     if (window.parent !== window) {
       window.parent.postMessage(
         { type: MESSAGE_TYPES.HOST_READY },
-        "http://localhost:3000"
+        window.location.origin
       );
     }
 
