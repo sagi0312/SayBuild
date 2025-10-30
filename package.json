@@ -2,7 +2,9 @@
   "name": "saybuild",
   "private": true,
   "scripts": {
-    "dev:web": "pnpm --filter web dev"
+    "dev": "pnpm build:mcp && pnpm --filter web dev",
+    "build:mcp": "pnpm --filter component-tree-services build",
+    "build": "pnpm build:mcp && pnpm --filter web build"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

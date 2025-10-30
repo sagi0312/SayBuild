@@ -12,7 +12,7 @@ export const ModeToggle = ({ mode, onModeChange }: ModeToggleProps) => {
       <button
         onClick={() => onModeChange("voice")}
         className={clsx(
-          "flex p-1 rounded-full transition-colors",
+          "flex p-2 rounded-full transition-colors",
           mode === "voice"
             ? "bg-green-200 shadow-sm text-gray-900"
             : "text-gray-600 hover:text-gray-900"
@@ -23,7 +23,7 @@ export const ModeToggle = ({ mode, onModeChange }: ModeToggleProps) => {
       <button
         onClick={() => onModeChange("text")}
         className={clsx(
-          "flex p-1 rounded-full transition-colors",
+          "flex p-2 rounded-full transition-colors",
           mode === "text"
             ? "bg-green-200 shadow-sm text-gray-900"
             : "text-gray-600 hover:text-gray-900"
