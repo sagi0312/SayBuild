@@ -12,7 +12,7 @@ import { Component, ComponentProps, MESSAGE_TYPES } from "@saybuild/shared";
 import { findComponentByKey } from "@saybuild/shared/utils/findComponentByKey";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { BuilderHeader } from "./components/builderHeader/BuilderHeader";
+import { BuilderHeader } from "../header/builderHeader/BuilderHeader";
 import { Suspense } from "react";
 
 export default function SayBuilderPage() {

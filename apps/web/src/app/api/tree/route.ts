@@ -5,7 +5,6 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 import type { Component } from "@saybuild/shared";
 import type { MessageParam } from "@anthropic-ai/sdk/resources/messages.mjs";
 import { createClient } from "@/lib/supabase/server";
-import { DAILY_LIMIT } from "@saybuild/shared";
 import { checkAndIncrementUsage } from "./usage";
 
 export async function GET(request: Request): Promise<NextResponse> {

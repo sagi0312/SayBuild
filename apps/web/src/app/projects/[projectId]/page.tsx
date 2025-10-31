@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { BuilderHeader } from "@/app/sayBuilder/components/builderHeader/BuilderHeader";
+import { BuilderHeader } from "@/app/header/builderHeader/BuilderHeader";
 
 interface ProjectPageProps {
   params: Promise<{ projectId: string }>;
