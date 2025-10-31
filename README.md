@@ -1,12 +1,23 @@
 # SayBuild
 
+**Live Demo:** [saybuild.vercel.app](https://saybuild.vercel.app)
+
 A voice-driven visual page builder powered by Claude AI, Supabase, and Next.js. Build web pages by simply speaking.
 
 ## What It Does
 
-Speak naturally: **"Add a blue button"** → Button appears instantly.
+Speak naturally: **"Add a blue button"** → Blue Button appears.
 
 SayBuild lets multiple users create and manage their own projects with Google OAuth authentication, real-time updates, and AI-powered voice commands.
+
+### Installation
+
+```bash
+# Clone and install
+git clone https://github.com/sagi0312/SayBuild.git
+cd saybuild
+pnpm install
+```
 
 ## Project Structure
 
