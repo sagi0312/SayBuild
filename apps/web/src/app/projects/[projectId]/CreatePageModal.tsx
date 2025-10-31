@@ -6,7 +6,6 @@ interface CreatePageModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (pageName: string) => void;
-  projectId: string;
   isLoading?: boolean;
 }
 
@@ -14,7 +13,6 @@ export function CreatePageModal({
   isOpen,
   onClose,
   onSubmit,
-  projectId,
   isLoading = false,
 }: CreatePageModalProps) {
   const [pageName, setPageName] = useState("");

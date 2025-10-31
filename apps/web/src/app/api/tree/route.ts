@@ -19,20 +19,13 @@ export async function GET(request: Request): Promise<NextResponse> {
 
     const supabase = await createClient();
 
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from("pages")
       .select("component_tree")
       .eq("id", pageId)
       .single();
 
-    if (error) {
-      return NextResponse.json(
-        { error: "Failed to fetch page" },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json(data.component_tree);
+    return NextResponse.json(data?.component_tree);
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to read component tree" },
@@ -79,7 +72,6 @@ export async function POST(req: Request) {
     }
 
     const tree: Component = data.component_tree;
-    const rootKey = tree.key;
 
     const { client, tools } = await setupMCPClient(pageId);
 

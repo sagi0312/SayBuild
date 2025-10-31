@@ -6,7 +6,7 @@ interface MCPClientSetup {
   tools: Array<{
     name: string;
     description: string | undefined;
-    input_schema: any;
+    input_schema: unknown;
   }>;
 }
 
