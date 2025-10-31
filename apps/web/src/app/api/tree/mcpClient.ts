@@ -1,13 +1,10 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import type { Tool } from "@anthropic-ai/sdk/resources/messages.mjs";
 
 interface MCPClientSetup {
   client: Client;
-  tools: Array<{
-    name: string;
-    description: string | undefined;
-    input_schema: unknown;
-  }>;
+  tools: Tool[];
 }
 
 export async function setupMCPClient(pageId: string): Promise<MCPClientSetup> {
@@ -31,8 +28,8 @@ export async function setupMCPClient(pageId: string): Promise<MCPClientSetup> {
   const toolsResponse = await client.listTools();
   const tools = toolsResponse.tools.map((tool) => ({
     name: tool.name,
-    description: tool.description,
-    input_schema: tool.inputSchema,
+    description: tool.description ?? "",
+    input_schema: tool.inputSchema as Tool["input_schema"],
   }));
 
   return { client, tools };

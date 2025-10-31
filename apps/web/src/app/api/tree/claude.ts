@@ -1,12 +1,13 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { MessageParam } from "@anthropic-ai/sdk/resources/messages.mjs";
 import type { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import type { Tool } from "@anthropic-ai/sdk/resources/messages.mjs";
 
 export async function executeCommand(
   transcript: string,
   rootKey: string,
   mcpClient: Client,
-  tools: any[]
+  tools: Tool[]
 ) {
   const anthropic = new Anthropic({
     apiKey: process.env.ANTHROPIC_API_KEY,

@@ -28,7 +28,7 @@ export async function GET(request: Request): Promise<NextResponse> {
     return NextResponse.json(data?.component_tree);
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to read component tree" },
+      { error: error instanceof Error ? error.message : "Unknown error" },
       { status: 500 }
     );
   }
