@@ -69,4 +69,4 @@ export const MESSAGE_TYPES = {
   COMPONENT_POSITIONS: "COMPONENT_POSITIONS",
 };
 
-export const DAILY_LIMIT = 3;
+export const DAILY_LIMIT = 10;
