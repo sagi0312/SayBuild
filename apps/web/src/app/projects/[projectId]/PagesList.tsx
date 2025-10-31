@@ -97,7 +97,6 @@ export function PagesList({ pages, projectId, projectName }: PagesListProps) {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleCreatePage}
-        projectId={projectId}
         isLoading={isCreating}
       />
     </>
