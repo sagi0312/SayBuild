@@ -24,7 +24,7 @@ export async function executeCommand(
     Execute the command now.`;
 
   let response = await anthropic.messages.create({
-    model: "claude-sonnet-4-5-20250929",
+    model: "claude-3-5-haiku-20241022",
     max_tokens: 4096,
     messages: [{ role: "user", content: prompt }],
     tools,
@@ -53,7 +53,7 @@ export async function executeCommand(
     messages.push({ role: "user", content: toolResults });
 
     response = await anthropic.messages.create({
-      model: "claude-sonnet-4-5-20250929",
+      model: "claude-3-5-haiku-20241022",
       max_tokens: 4096,
       messages,
       tools,
