@@ -15,6 +15,7 @@ export var BoxComponentProps;
     BoxComponentProps["BackgroundColor"] = "backgroundColor";
     BoxComponentProps["Padding"] = "padding";
     BoxComponentProps["Width"] = "width";
+    BoxComponentProps["Height"] = "height";
 })(BoxComponentProps || (BoxComponentProps = {}));
 export var ButtonComponentProps;
 (function (ButtonComponentProps) {

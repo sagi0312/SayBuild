@@ -6,6 +6,7 @@ export type BoxProps = {
   backgroundColor?: string;
   padding?: number;
   width?: number;
+  height?: number | string;
   children?: ReactNode;
 };
 
@@ -15,6 +16,7 @@ export function Box({
   padding,
   width,
   children,
+  height,
   componentKey,
 }: BoxProps) {
   return (
@@ -24,7 +26,7 @@ export function Box({
       className={`
         flex flex-col gap-4 
       `}
-      style={{ backgroundColor, padding, width }}
+      style={{ backgroundColor, padding, width, height }}
     >
       {children}
     </div>

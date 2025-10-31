@@ -12,7 +12,8 @@ export declare enum TextComponentProps {
 export declare enum BoxComponentProps {
     BackgroundColor = "backgroundColor",
     Padding = "padding",
-    Width = "width"
+    Width = "width",
+    Height = "height"
 }
 export declare enum ButtonComponentProps {
     BackgroundColor = "backgroundColor",
@@ -25,6 +26,7 @@ export type Box = {
     props: {
         padding?: number;
         width?: number;
+        height?: number | string;
         backgroundColor?: string;
         children?: Component[];
     };

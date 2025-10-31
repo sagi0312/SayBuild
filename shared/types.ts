@@ -15,6 +15,7 @@ export enum BoxComponentProps {
   BackgroundColor = "backgroundColor",
   Padding = "padding",
   Width = "width",
+  Height = "height",
 }
 
 export enum ButtonComponentProps {
@@ -29,6 +30,7 @@ export type Box = {
   props: {
     padding?: number;
     width?: number;
+    height?: number | string;
     backgroundColor?: string;
     children?: Component[];
   };

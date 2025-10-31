@@ -104,6 +104,21 @@ export const PropertiesPanel = ({
                 onChange(value, BoxComponentProps.Width, selectedComponent.key);
               }}
             />
+            <TextInput
+              label="Height"
+              value={
+                selectedComponent.props.height
+                  ? String(selectedComponent.props.height)
+                  : ""
+              }
+              onChange={(value) => {
+                onChange(
+                  isNaN(Number(value)) ? value : Number(value),
+                  BoxComponentProps.Height,
+                  selectedComponent.key
+                );
+              }}
+            />
           </>
         )}
         {selectedComponent?.type === COMPONENT_TYPE.Button && (
