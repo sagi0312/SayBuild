@@ -206,7 +206,10 @@ function SayBuilderContent() {
         </div>
       )}
       <div className="flex-1 flex overflow-hidden">
-        <aside className="w-80 bg-white border-r">
+        <aside
+          style={{ backgroundImage: "url('/mic.jpg')" }}
+          className="bg-cover bg-center bg-opacity-90 rounded-lg shadow-lg p-3"
+        >
           <ComponentsPanel
             onTranscriptChange={handleTranscriptChange}
             onShowAliases={handleShowAliases}

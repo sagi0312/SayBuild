@@ -53,11 +53,14 @@ export function PagesList({ pages, projectId, projectName }: PagesListProps) {
 
   return (
     <>
-      <div className="bg-gray-100 bg-opacity-90 rounded-lg shadow-lg p-8">
+      <div
+        style={{ backgroundImage: "url('/mic.jpg')" }}
+        className="bg-cover bg-center bg-opacity-90 rounded-lg shadow-lg p-8"
+      >
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">{projectName}</h1>
-            <p className="text-gray-600 text-sm mt-1">Pages</p>
+            <h1 className="text-2xl font-bold text-white">{projectName}</h1>
+            <p className="text-sm mt-1">Pages</p>
           </div>
           <button
             onClick={() => setIsModalOpen(true)}

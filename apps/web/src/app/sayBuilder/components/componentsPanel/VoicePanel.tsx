@@ -1,4 +1,3 @@
-// VoicePanel.tsx
 "use client";
 import { useState } from "react";
 import { ModeToggle } from "./ModeToggle";

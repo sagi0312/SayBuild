@@ -16,7 +16,7 @@ export function ComponentsPanel({
       />
 
       <div>
-        <h2 className="text-lg text-gray-800 mb-4 flex items-center font-semibold justify-center">
+        <h2 className="text-lg text-blue-300 mb-4 flex items-center font-semibold">
           Available Components
         </h2>
 

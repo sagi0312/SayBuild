@@ -15,7 +15,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-64px)] flex justify-center items-center bg-gradient-to-b from-blue-200 to-green-200">
+    <div
+      className="h-[calc(100vh-64px)] flex justify-center items-center bg-cover bg-center"
+      style={{ backgroundImage: "url('/mic.jpg')" }}
+    >
       <div className="text-center p-8 bg-white border-2 border-gray-300 bg-opacity-80 rounded-lg shadow-lg max-w-2xl">
         <h1 className="font-bold uppercase text-black text-lg">
           Login to SayBuild
