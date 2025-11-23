@@ -113,7 +113,7 @@ function SayBuilderContent() {
     }
   };
 
-  const handleOnChange = async (
+  const handleOnBlur = async (
     value: string | number,
     propName: ComponentProps,
     componentKeyToUpdate: string
@@ -125,6 +125,7 @@ function SayBuilderContent() {
         componentKey: componentKeyToUpdate,
         props: { [propName]: value },
         pageId: pageId,
+        component_tree: componentTree,
       }),
     });
   };
@@ -238,7 +239,7 @@ function SayBuilderContent() {
           <aside className="w-80 bg-white border-l">
             <PropertiesPanel
               selectedComponent={selectedComponent}
-              onChange={handleOnChange}
+              onBlur={handleOnBlur}
             />
           </aside>
         )}

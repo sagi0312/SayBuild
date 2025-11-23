@@ -1,34 +1,14 @@
 "use client";
-
-import { useDebouncer } from "@/hooks/useDebouncer";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 type Props = {
   label: string;
   value: number;
-  onChange?: (value: number) => void;
+  onBlur?: (value: number) => void;
 };
 
-export function NumberInput({ label, value, onChange }: Props) {
+export function NumberInput({ label, value, onBlur }: Props) {
   const [inputValue, setInputValue] = useState(value ?? 0);
-  const debouncedValue = useDebouncer(inputValue, 500);
-  const isUserInput = useRef(false);
-
-  // Update inputValue when props change (but don't trigger onChange)
-  useEffect(() => {
-    if (!isUserInput.current) {
-      setInputValue(value ?? 0);
-    }
-  }, [value]);
-
-  // Only call onChange when user actually changed the input
-  useEffect(() => {
-    if (isUserInput.current) {
-      onChange?.(debouncedValue);
-      // Reset flag after handling user input
-      isUserInput.current = false;
-    }
-  }, [debouncedValue, onChange]);
 
   return (
     <label className="flex flex-col gap-1">
@@ -37,8 +17,10 @@ export function NumberInput({ label, value, onChange }: Props) {
       <input
         type="number"
         value={inputValue}
+        onBlur={() => {
+          onBlur?.(inputValue);
+        }}
         onChange={(e) => {
-          isUserInput.current = true; // Mark as user input
           setInputValue(Number(e.target.value));
         }}
         autoComplete="off"

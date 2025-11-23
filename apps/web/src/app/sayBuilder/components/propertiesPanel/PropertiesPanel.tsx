@@ -11,7 +11,7 @@ import { NumberInput } from "./NumberInput";
 
 interface PropertiesPanelProps {
   selectedComponent: Component | null;
-  onChange: (
+  onBlur: (
     value: string | number,
     propName: ComponentProps,
     componentKeyToUpdate: string
@@ -20,7 +20,7 @@ interface PropertiesPanelProps {
 
 export const PropertiesPanel = ({
   selectedComponent,
-  onChange,
+  onBlur,
 }: PropertiesPanelProps) => {
   return (
     <aside className="w-72 border-gray-300">
@@ -34,26 +34,22 @@ export const PropertiesPanel = ({
             <TextInput
               label="Text"
               value={selectedComponent.props.text ?? ""}
-              onChange={(value) => {
-                onChange(value, TextComponentProps.Text, selectedComponent.key);
+              onBlur={(value: string) => {
+                onBlur(value, TextComponentProps.Text, selectedComponent.key);
               }}
             />
             <TextInput
               label="Color"
               value={selectedComponent.props.color ?? ""}
-              onChange={(value) => {
-                onChange(
-                  value,
-                  TextComponentProps.Color,
-                  selectedComponent.key
-                );
+              onBlur={(value: string) => {
+                onBlur(value, TextComponentProps.Color, selectedComponent.key);
               }}
             />
             <NumberInput
               label="Font size"
               value={selectedComponent.props.fontSize ?? 16}
-              onChange={(value) => {
-                onChange(
+              onBlur={(value: number) => {
+                onBlur(
                   value,
                   TextComponentProps.FontSize,
                   selectedComponent.key
@@ -63,8 +59,8 @@ export const PropertiesPanel = ({
             <NumberInput
               label="Font weight"
               value={selectedComponent.props.fontWeight ?? 400}
-              onChange={(value) => {
-                onChange(
+              onBlur={(value: number) => {
+                onBlur(
                   value,
                   TextComponentProps.FontWeight,
                   selectedComponent.key
@@ -78,8 +74,8 @@ export const PropertiesPanel = ({
             <TextInput
               label="Color"
               value={selectedComponent.props.backgroundColor ?? ""}
-              onChange={(value) => {
-                onChange(
+              onBlur={(value: string) => {
+                onBlur(
                   value,
                   BoxComponentProps.BackgroundColor,
                   selectedComponent.key
@@ -89,19 +85,15 @@ export const PropertiesPanel = ({
             <NumberInput
               label="Padding"
               value={selectedComponent.props.padding ?? 16}
-              onChange={(value) => {
-                onChange(
-                  value,
-                  BoxComponentProps.Padding,
-                  selectedComponent.key
-                );
+              onBlur={(value: number) => {
+                onBlur(value, BoxComponentProps.Padding, selectedComponent.key);
               }}
             />
             <NumberInput
               label="Width"
               value={selectedComponent.props.width ?? 200}
-              onChange={(value) => {
-                onChange(value, BoxComponentProps.Width, selectedComponent.key);
+              onBlur={(value: number) => {
+                onBlur(value, BoxComponentProps.Width, selectedComponent.key);
               }}
             />
             <TextInput
@@ -111,8 +103,8 @@ export const PropertiesPanel = ({
                   ? String(selectedComponent.props.height)
                   : ""
               }
-              onChange={(value) => {
-                onChange(
+              onBlur={(value: string) => {
+                onBlur(
                   isNaN(Number(value)) ? value : Number(value),
                   BoxComponentProps.Height,
                   selectedComponent.key
@@ -126,8 +118,8 @@ export const PropertiesPanel = ({
             <TextInput
               label="Color"
               value={selectedComponent.props.backgroundColor ?? ""}
-              onChange={(value) => {
-                onChange(
+              onBlur={(value: string) => {
+                onBlur(
                   value,
                   ButtonComponentProps.BackgroundColor,
                   selectedComponent.key
@@ -137,12 +129,8 @@ export const PropertiesPanel = ({
             <TextInput
               label="Text"
               value={selectedComponent.props.text ?? ""}
-              onChange={(value) => {
-                onChange(
-                  value,
-                  ButtonComponentProps.Text,
-                  selectedComponent.key
-                );
+              onBlur={(value: string) => {
+                onBlur(value, ButtonComponentProps.Text, selectedComponent.key);
               }}
             />
           </>

@@ -4,7 +4,7 @@ import { findComponentByKey } from "@saybuild/shared/utils/findComponentByKey";
 
 export async function PATCH(req: Request): Promise<NextResponse> {
   try {
-    const { componentKey, props, pageId } = await req.json();
+    const { componentKey, props, pageId, component_tree } = await req.json();
 
     if (!pageId) {
       return NextResponse.json(
@@ -15,23 +15,9 @@ export async function PATCH(req: Request): Promise<NextResponse> {
 
     const supabase = await createClient();
 
-    // Fetch current tree
-    const { data, error: fetchError } = await supabase
-      .from("pages")
-      .select("component_tree")
-      .eq("id", pageId)
-      .single();
-
-    if (fetchError || !data) {
-      return NextResponse.json(
-        { error: "Failed to fetch page" },
-        { status: 500 }
-      );
-    }
-
     // Find and update component
-    const tree = data.component_tree;
-    const component = findComponentByKey(tree, componentKey);
+    const tree = component_tree;
+    const component = findComponentByKey(component_tree, componentKey);
 
     if (!component) {
       return NextResponse.json(

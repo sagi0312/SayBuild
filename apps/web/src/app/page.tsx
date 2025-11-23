@@ -21,7 +21,7 @@ export default async function Home() {
   return (
     <>
       <BuilderHeader />
-      <div className="min-h-[calc(100vh-64px)] bg-gradient-to-b from-blue-200 to-green-200 p-8">
+      <div className="min-h-[calc(100vh-64px)] bg-gradient-to-b from-blue-300 to-green-300 p-8">
         <div className="max-w-4xl mx-auto">
           <ProjectsList projects={projects} />
         </div>
