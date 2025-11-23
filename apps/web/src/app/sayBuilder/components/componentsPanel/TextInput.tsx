@@ -16,9 +16,9 @@ export const TextInput = ({ onTranscriptChange }: TextInputProps) => {
   };
 
   return (
-    <div className="w-full">
+    <div>
       <textarea
-        className="w-full text-white border border-gray-300 rounded-lg p-4 resize-none focus:outline-none focus:ring-1 focus:ring-green-400 focus:border-transparent"
+        className="p-4 m-4 border border-gray-300 rounded shadow-sm bg-white text-black focus:outline-none focus:ring-1 focus:ring-green-400 focus:border-transparent"
         rows={4}
         value={transcript}
         onChange={(e) => setTranscript(e.target.value)}

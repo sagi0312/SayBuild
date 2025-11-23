@@ -207,10 +207,7 @@ function SayBuilderContent() {
         </div>
       )}
       <div className="flex-1 flex overflow-hidden">
-        <aside
-          style={{ backgroundImage: "url('/mic.jpg')" }}
-          className="bg-cover bg-center bg-opacity-90 rounded-lg shadow-lg p-3"
-        >
+        <aside className="bg-gray-100 border-r overflow-y-auto">
           <ComponentsPanel
             onTranscriptChange={handleTranscriptChange}
             onShowAliases={handleShowAliases}
@@ -218,7 +215,7 @@ function SayBuilderContent() {
         </aside>
 
         <main className="flex flex-1 border-t border-gray-300">
-          <section className="flex-1 p-6 bg-gray-100 border-r border-gray-300 relative">
+          <section className="flex-1 bg-gray-100 border-r border-gray-300 relative">
             <iframe
               ref={iframeRef}
               src="/pageRenderer"
